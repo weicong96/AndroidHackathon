@@ -1,6 +1,6 @@
 {
  "kind": "discovery#rpcDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/A_l74CWZcUv2FJGzI9w9UXuj4Bc\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/HlbcykAGBlsu5jYgHxqqKvG1WyY\"",
  "discoveryVersion": "v1",
  "id": "userApi:v1",
  "name": "userApi",
@@ -71,6 +71,31 @@
   }
  },
  "schemas": {
+  "Achievements": {
+   "id": "Achievements",
+   "type": "object",
+   "properties": {
+    "achievementID": {
+     "type": "string",
+     "format": "int64"
+    },
+    "achievementTitle": {
+     "type": "string"
+    }
+   }
+  },
+  "AchievementsCollection": {
+   "id": "AchievementsCollection",
+   "type": "object",
+   "properties": {
+    "items": {
+     "type": "array",
+     "items": {
+      "$ref": "Achievements"
+     }
+    }
+   }
+  },
   "CollectionResponse_User": {
    "id": "CollectionResponse_User",
    "type": "object",
@@ -86,40 +111,140 @@
     }
    }
   },
+  "Post": {
+   "id": "Post",
+   "type": "object",
+   "properties": {
+    "facebookPostID": {
+     "type": "string"
+    },
+    "postID": {
+     "type": "string"
+    },
+    "timePosted": {
+     "type": "string",
+     "format": "int64"
+    },
+    "title": {
+     "type": "string"
+    }
+   }
+  },
+  "PostCollection": {
+   "id": "PostCollection",
+   "type": "object",
+   "properties": {
+    "items": {
+     "type": "array",
+     "items": {
+      "$ref": "Post"
+     }
+    }
+   }
+  },
   "User": {
    "id": "User",
    "type": "object",
    "properties": {
+    "email": {
+     "type": "string"
+    },
+    "level": {
+     "type": "string"
+    },
+    "name": {
+     "type": "string"
+    },
+    "needy": {
+     "type": "boolean"
+    },
     "points": {
      "type": "string",
      "format": "int64"
     },
     "razerID": {
      "type": "string"
-    },
-    "userID": {
-     "type": "string",
-     "format": "int64"
     }
    }
   }
  },
  "methods": {
+  "userApi.addPoint": {
+   "id": "userApi.addPoint",
+   "allowGet": true,
+   "parameters": {
+    "razerID": {
+     "type": "string",
+     "required": true
+    },
+    "targetUser": {
+     "type": "string",
+     "required": true
+    }
+   },
+   "parameterOrder": [
+    "razerID",
+    "targetUser"
+   ],
+   "returns": {
+    "$ref": "User"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
   "userApi.get": {
    "id": "userApi.get",
    "allowGet": true,
    "parameters": {
-    "userID": {
+    "razerID": {
      "type": "string",
-     "required": true,
-     "format": "int64"
+     "required": true
     }
    },
    "parameterOrder": [
-    "userID"
+    "razerID"
    ],
    "returns": {
     "$ref": "User"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "userApi.getAchievementForUser": {
+   "id": "userApi.getAchievementForUser",
+   "allowGet": true,
+   "parameters": {
+    "razerID": {
+     "type": "string",
+     "required": true
+    }
+   },
+   "parameterOrder": [
+    "razerID"
+   ],
+   "returns": {
+    "$ref": "AchievementsCollection"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "userApi.getUserPosts": {
+   "id": "userApi.getUserPosts",
+   "allowGet": true,
+   "parameters": {
+    "razerID": {
+     "type": "string",
+     "required": true
+    }
+   },
+   "parameterOrder": [
+    "razerID"
+   ],
+   "returns": {
+    "$ref": "PostCollection"
    },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"
@@ -161,67 +286,17 @@
     "https://www.googleapis.com/auth/userinfo.email"
    ]
   },
-  "userApi.patch": {
-   "id": "userApi.patch",
-   "supportsPatch": true,
-   "parameters": {
-    "points": {
-     "type": "string",
-     "format": "int64"
-    },
-    "razerID": {
-     "type": "string"
-    },
-    "userID": {
-     "type": "string",
-     "format": "int64"
-    }
-   },
-   "parameterOrder": [
-    "userID"
-   ],
-   "returns": {
-    "$ref": "User"
-   },
-   "scopes": [
-    "https://www.googleapis.com/auth/userinfo.email"
-   ]
-  },
   "userApi.remove": {
    "id": "userApi.remove",
    "parameters": {
-    "userID": {
+    "razerID": {
      "type": "string",
-     "required": true,
-     "format": "int64"
+     "required": true
     }
    },
    "parameterOrder": [
-    "userID"
+    "razerID"
    ],
-   "scopes": [
-    "https://www.googleapis.com/auth/userinfo.email"
-   ]
-  },
-  "userApi.update": {
-   "id": "userApi.update",
-   "parameters": {
-    "resource": {
-     "$ref": "User"
-    },
-    "userID": {
-     "type": "string",
-     "required": true,
-     "format": "int64"
-    }
-   },
-   "parameterOrder": [
-    "resource",
-    "userID"
-   ],
-   "returns": {
-    "$ref": "User"
-   },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"
    ]

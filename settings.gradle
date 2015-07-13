@@ -1,1 +1,2 @@
-include ':app', ':apiBackend'
+include ':app', ':api'
+project(':api').projectDir = new File('apiBackend')
