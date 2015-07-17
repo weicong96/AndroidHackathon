@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.GridView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.admin.myapplication.backend.userApi.UserApi;
 import com.example.admin.myapplication.backend.userApi.model.Achievements;
@@ -29,49 +31,47 @@ import java.util.logging.Logger;
 public class MainActivity extends ActionBarActivity {
 
     SharedPreferences preferences;
-    String PREFS_LOGIN = "login_info";
+
     CustomGridView gvAchievements;
+    ProgressBar pgPoints;
+    TextView tvProgress;
+
     public User user;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+    //Allow the ui to refresh without reopening activity
+    public void refreshUI(){
         setupAPIS();
-        gvAchievements = (CustomGridView) findViewById(R.id.gvAchievements);
+
         try {
-            preferences = getSharedPreferences(PREFS_LOGIN, Context.MODE_PRIVATE);
-            //Login if not already logged in
-            if(!preferences.getBoolean("loggedin", false)){
-                User user = new User();
-                user.setName("Wei Cong Helper");
-                user.setEmail("twentyeightbytes@gmail.com");
-                user.setNeedy(false);
-                user.setLevel("Helper");
+            LoginUtils.getInstance(getBaseContext()).refreshUser();
+            user = LoginUtils.getInstance(getBaseContext()).getUser();
 
-                user.setRazerID("HELPERID");
-                user.setPoints(1l);
-
-                user = new InsertUser().execute(user).get();
-                login(user.getRazerID(), user.getName(), user.getEmail());
-            }
-            user = new GetUser().execute(preferences.getString("razerID", "")).get();
             List<Achievements> fromWeb = new GetAchievements().execute(user).get();
             if(fromWeb == null)
                 fromWeb = new ArrayList<Achievements>();
             ArrayList<Achievements> achievements = new ArrayList<Achievements>(fromWeb);
             gvAchievements.setAdapter(new AchievementsAdapter(getApplicationContext(),achievements));
+
+
+            pgPoints.setProgress((int)(user.getPoints() / 100));
+            tvProgress.setText(user.getPoints()+" / 100 points");
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
     }
-    public void login(String razerID, String name, String email){
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("loggedin", true);
-        editor.putString("razerID", razerID);
-        editor.commit();
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        gvAchievements = (CustomGridView) findViewById(R.id.gvAchievements);
+        pgPoints = (ProgressBar) findViewById(R.id.pbPoints);
+        tvProgress = (TextView) findViewById(R.id.tvProgress);
+
+        refreshUI();
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -111,35 +111,12 @@ public class MainActivity extends ActionBarActivity {
         }
         //Add Activities
         //Share to facebook?
-    }
-    private UserApi api = null;
-    public void setupAPIS(){
-        if(api == null) {
-            UserApi.Builder endpoint = new UserApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null);
-            endpoint.setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
-                @Override
-                public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
-                    abstractGoogleClientRequest.setDisableGZipContent(true);
-                }
-            });
-            api = endpoint.build();
-        }
-    }
-    private class GetUser extends AsyncTask<String, Void ,User>{
 
-        @Override
-        protected User doInBackground(String... id) {
-            try {
-                if(id[0].equals("")){
-                    System.out.println("NULL ID");
-                }
-                return api.get(id[0]).execute();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
+        //find some way to refresh UI here
+        refreshUI();
     }
+
+
     private class GetAchievements extends AsyncTask<User, Void, List<com.example.admin.myapplication.backend.userApi.model.Achievements>>{
 
         @Override
@@ -167,29 +144,18 @@ public class MainActivity extends ActionBarActivity {
             //return null;
         }
     }
-    private class InsertUser extends AsyncTask<User, Void, User>{
-        private UserApi api = null;
-        @Override
-        protected User doInBackground(User... params) {
-            if(api == null){
-                UserApi.Builder endpoint = new UserApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null);
-                endpoint.setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
-                    @Override
-                    public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
-                        abstractGoogleClientRequest.setDisableGZipContent(true);
-                    }
-                });
-                api = endpoint.build();
-
-                try {
-                    User newUser = api.insert(params[0]).execute();
-                    return newUser;
-                } catch (IOException e) {
-                    e.printStackTrace();
+    private UserApi api = null;
+    public void setupAPIS(){
+        if(api == null) {
+            UserApi.Builder endpoint = new UserApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null);
+            endpoint.setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
+                @Override
+                public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
+                    abstractGoogleClientRequest.setDisableGZipContent(true);
                 }
-            }
-            return null;
-            //return null;
+            });
+            api = endpoint.build();
         }
     }
+
 }

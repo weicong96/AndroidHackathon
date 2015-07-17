@@ -12,16 +12,21 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".PostsActivity"
+            android:label="@string/title_activity_posts" >
+        </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/title_activity_login" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".PostsActivity"
-            android:label="@string/title_activity_posts" >
-        </activity>
+        <activity android:name="com.razer.android.nabuopensdk.ActivityWebView"></activity>
     </application>
 
 </manifest>

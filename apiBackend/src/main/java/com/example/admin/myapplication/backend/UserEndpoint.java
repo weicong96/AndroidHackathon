@@ -228,48 +228,65 @@ public class UserEndpoint {
             if(targetUser.isNeedy()) {
                 helped.add(Ref.create(targetUser));
                 user.setHelped(helped);
-            }
 
-            //Add achievement
-            Achievements newAchievement = null;
-            if(helped.size() >= 3){
-                //Check if got achievements already
-                newAchievement = AchievementsENUM.getAchivements(AchievementsENUM.UNIQUE_THREE);
-            }
-            if(helped.size() >= 7){
-                newAchievement = AchievementsENUM.getAchivements(AchievementsENUM.UNIQUE_SEVEN);
-            }
-            if(helped.size() >= 10){
-                newAchievement = AchievementsENUM.getAchivements(AchievementsENUM.UNIQUE_TEN);
-            }
-            if(newAchievement != null){
-                Ref<Achievements> refAch = Ref.create(newAchievement);
-                List<Ref<Achievements>> list = user.getAchievements();
-                if(list == null)
-                    list = new ArrayList<Ref<Achievements>>();
 
-                list.add(refAch);
-                user.setAchievements(list);
+                //Add achievement
+                Achievements newAchievement = null;
+                if (helped.size() >= 3) {
+                    //Check if got achievements already
+                    newAchievement = AchievementsENUM.getAchivements(AchievementsENUM.UNIQUE_THREE);
+                }
+                if (helped.size() >= 7) {
+                    newAchievement = AchievementsENUM.getAchivements(AchievementsENUM.UNIQUE_SEVEN);
+                }
+                if (helped.size() >= 10) {
+                    newAchievement = AchievementsENUM.getAchivements(AchievementsENUM.UNIQUE_TEN);
+                }
+                if (gotAchievements(newAchievement, user)) {
+                    newAchievement = null;
+                }
+                if (newAchievement != null) {
+                    Ref<Achievements> refAch = Ref.create(newAchievement);
+                    List<Ref<Achievements>> list = user.getAchievements();
+                    if (list == null)
+                        list = new ArrayList<Ref<Achievements>>();
+
+                    list.add(refAch);
+                    user.setAchievements(list);
+                }
+
+                Post post = new Post();
+                post.setTitle("I helped somebody!");
+                post.setPostID(UUID.randomUUID().toString().replace("-", ""));
+                post.setFacebookPostID("434535");
+                post.setTimePosted(Calendar.getInstance().getTimeInMillis());
+                post.setUser(Ref.create(user));
+
+                List<Ref<Post>> postsList = user.getPosts();
+                if (postsList == null)
+                    postsList = new ArrayList<Ref<Post>>();
+                postsList.add(Ref.create(post));
+                user.setPosts(postsList);
+                ofy().save().entity(user).now();
             }
-
-            Post post = new Post();
-            post.setTitle("I helped somebody!");
-            post.setPostID(UUID.randomUUID().toString().replace("-", ""));
-            post.setFacebookPostID("434535");
-            post.setTimePosted(Calendar.getInstance().getTimeInMillis());
-            post.setUser(Ref.create(user));
-
-            List<Ref<Post>> postsList = user.getPosts();
-            if(postsList ==null)
-                postsList = new ArrayList<Ref<Post>>();
-            postsList.add(Ref.create(post));
-            user.setPosts(postsList);
-            ofy().save().entity(user).now();
             return ofy().load().entity(user).now();
 
         } catch (NotFoundException e) {
             e.printStackTrace();
         }
         return null;
+    }
+    private boolean gotAchievements(Achievements ach, User user){
+        boolean found = false;
+        ArrayList<Achievements> list = new ArrayList<Achievements>();
+        for(Ref<Achievements> ref : user.getAchievements()){
+               list.add(ref.get());
+        }
+        for(Achievements achievements : list){
+            if(achievements.getAchievementID() == ach.getAchievementID()){
+                found = true;
+            }
+        }
+        return found;
     }
 }

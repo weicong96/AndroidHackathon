@@ -4,10 +4,9 @@ package com.example.admin.myapplication.backend;
  * Created by Administrator on 7/12/15.
  */
 public enum AchievementsENUM {
-    UNIQUE_ONE(1 , "Helped one people"),
-    UNIQUE_THREE(2 , "Helped three people"),
-    UNIQUE_SEVEN(3 , "Helped seven people"),
-    UNIQUE_TEN(4, "Helped ten people");
+    UNIQUE_THREE(1 , "Helped three people"),
+    UNIQUE_SEVEN(2 , "Helped seven people"),
+    UNIQUE_TEN(3, "Helped ten people");
 
     public long id;
     public String title;

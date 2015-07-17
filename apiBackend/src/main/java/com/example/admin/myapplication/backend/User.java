@@ -35,6 +35,16 @@ public class User {
     private boolean needy;
     private String level;
     private long points;
+    private String profileUrl;
+
+    public String getProfileUrl() {
+        return profileUrl;
+    }
+
+    public void setProfileUrl(String profileUrl) {
+        this.profileUrl = profileUrl;
+    }
+
     @Load
     @ApiResourceProperty(ignored = AnnotationBoolean.TRUE)
     private List<Ref<Achievements>> achievements;
@@ -48,6 +58,9 @@ public class User {
     private List<Ref<Post>> posts;
 
     public List<Ref<Post>> getPosts() {
+        if(posts == null){
+            posts = new ArrayList<Ref<Post>>();
+        }
         return posts;
     }
 
@@ -56,6 +69,9 @@ public class User {
     }
 
     public List<Ref<Achievements>> getAchievements() {
+        if(achievements == null){
+           achievements = new ArrayList<Ref<Achievements>>();
+        }
         return achievements;
     }
 

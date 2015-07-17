@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/HlbcykAGBlsu5jYgHxqqKvG1WyY\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/HfKAawHuX0spRYebpwRycPrIZJQ\"",
  "discoveryVersion": "v1",
  "id": "userApi:v1",
  "name": "userApi",
@@ -163,6 +163,9 @@
     "points": {
      "type": "string",
      "format": "int64"
+    },
+    "profileUrl": {
+     "type": "string"
     },
     "razerID": {
      "type": "string"

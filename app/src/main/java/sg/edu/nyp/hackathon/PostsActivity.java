@@ -19,6 +19,7 @@ import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
 import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -35,6 +36,9 @@ public class PostsActivity extends ActionBarActivity {
         try {
             SharedPreferences preferences = getSharedPreferences(PREFS_LOGIN, Context.MODE_PRIVATE);
             List<Post> posts = new GetPosts().execute(preferences.getString("razerID","")).get();
+            if(posts == null){
+                posts = new ArrayList<Post>();
+            }
             lvPosts.setAdapter(new PostAdapter(getBaseContext(), posts));
         } catch (InterruptedException e) {
             e.printStackTrace();
