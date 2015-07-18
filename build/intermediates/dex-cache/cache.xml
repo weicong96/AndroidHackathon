@@ -19,7 +19,7 @@
         jar="C:\Documents and Settings\Administrator\Desktop\AndroidHackathon\backendNew\build\libs\backendNew-android-endpoints.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="e5e53cc7ec93904ae37ee2b8aed6e3a12002d1cd">
+        sha1="294d7cc044a93ecbd9d310b6a5d53055e8f7381b">
         <dex dex="C:\Documents and Settings\Administrator\Desktop\AndroidHackathon\app\build\intermediates\pre-dexed\debug\backendNew-android-endpoints-e49029765a5186e9a1e0575b85830949fad28c68.jar" />
     </item>
     <item
@@ -51,18 +51,18 @@
         <dex dex="C:\Documents and Settings\Administrator\Desktop\AndroidHackathon\app\build\intermediates\pre-dexed\debug\retrofit-1.9.0-4c66ea19c51bbcd6719859c94a58f89e91208e80.jar" />
     </item>
     <item
-        jar="C:\Documents and Settings\Administrator\Desktop\AndroidHackathon\app\libs\jackson-databind-2.2.3.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="03ae380888029daefb91d3ecdca3a37d8cb92bc9">
-        <dex dex="C:\Documents and Settings\Administrator\Desktop\AndroidHackathon\app\build\intermediates\pre-dexed\debug\jackson-databind-2.2.3-8387408e453b506b6a8b06ce3b1caeddfe1fe2d4.jar" />
-    </item>
-    <item
         jar="C:\Documents and Settings\Administrator\.gradle\caches\modules-2\files-2.1\com.google.guava\guava-jdk5\13.0\381ae6c8add7c98e9bcddb1e0b898400cd6fc3f7\guava-jdk5-13.0.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="381ae6c8add7c98e9bcddb1e0b898400cd6fc3f7">
         <dex dex="C:\Documents and Settings\Administrator\Desktop\AndroidHackathon\app\build\intermediates\pre-dexed\debug\guava-jdk5-13.0-3b5bccd14bee8094d5ddf24b083555cb36dfdac1.jar" />
+    </item>
+    <item
+        jar="C:\Documents and Settings\Administrator\Desktop\AndroidHackathon\app\libs\jackson-databind-2.2.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="03ae380888029daefb91d3ecdca3a37d8cb92bc9">
+        <dex dex="C:\Documents and Settings\Administrator\Desktop\AndroidHackathon\app\build\intermediates\pre-dexed\debug\jackson-databind-2.2.3-8387408e453b506b6a8b06ce3b1caeddfe1fe2d4.jar" />
     </item>
     <item
         jar="C:\Documents and Settings\Administrator\Desktop\AndroidHackathon\app\libs\volley.jar"
