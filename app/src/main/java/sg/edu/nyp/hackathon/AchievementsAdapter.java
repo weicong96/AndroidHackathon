@@ -7,11 +7,13 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.admin.myapplication.backend.userApi.model.Achievements;
 
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+
+import sg.edu.nyp.backend.userAchievementApi.model.Achievements;
+
 
 /**
  * Created by Administrator on 7/12/15.

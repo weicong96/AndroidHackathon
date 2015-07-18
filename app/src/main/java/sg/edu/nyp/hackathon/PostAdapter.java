@@ -1,4 +1,4 @@
-package sg.edu.nyp.hackathon;
+/*package sg.edu.nyp.hackathon;
 
 import android.content.Context;
 import android.text.Layout;
@@ -13,9 +13,6 @@ import com.example.admin.myapplication.backend.userApi.model.Post;
 
 import java.util.List;
 
-/**
- * Created by Administrator on 7/13/15.
- */
 public class PostAdapter extends BaseAdapter{
     List<Post> items;
     Context context;
@@ -54,4 +51,4 @@ public class PostAdapter extends BaseAdapter{
 
         return myView;
     }
-}
+}*/

@@ -1,3 +1,4 @@
+/*
 package sg.edu.nyp.hackathon;
 
 import android.content.Context;
@@ -94,3 +95,4 @@ public class PostsActivity extends ActionBarActivity {
         }
     }
 }
+*/

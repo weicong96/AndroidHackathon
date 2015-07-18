@@ -10,8 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.example.admin.myapplication.backend.userApi.UserApi;
-import com.example.admin.myapplication.backend.userApi.model.User;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
@@ -25,6 +23,9 @@ import com.razer.android.nabuopensdk.models.UserProfile;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
+
+import sg.edu.nyp.backend.userApi.model.User;
+import sg.edu.nyp.backend.userApi.UserApi;
 
 
 public class LoginActivity extends ActionBarActivity {

@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
-import com.example.admin.myapplication.backend.userApi.UserApi;
-import com.example.admin.myapplication.backend.userApi.model.User;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
@@ -13,6 +11,9 @@ import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
+
+import sg.edu.nyp.backend.userApi.UserApi;
+import sg.edu.nyp.backend.userApi.model.User;
 
 /**
  * Created by admin on 15/7/15.
@@ -65,6 +66,7 @@ public class LoginUtils {
 
         try {
             this.user = new GetUser().execute(razerID).get();
+            System.out.println("gg");
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -74,6 +76,7 @@ public class LoginUtils {
     public void refreshUser(){
         try {
             this.user = new GetUser().execute(this.user.getRazerID()).get();
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -85,7 +88,9 @@ public class LoginUtils {
         @Override
         protected User doInBackground(String... id) {
             try {
-                return api.get(id[0]).execute();
+                User user = api.get(id[0]).execute();
+                System.out.println(user.getRazerID());
+                return user;
             } catch (IOException e) {
                 e.printStackTrace();
             }

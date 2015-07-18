@@ -3,9 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AndroidHackathon.iml" filepath="$PROJECT_DIR$/AndroidHackathon.iml" />
-      <module fileurl="file://$PROJECT_DIR$/apiBackend/api.iml" filepath="$PROJECT_DIR$/apiBackend/api.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backendNew/backendNew.iml" filepath="$PROJECT_DIR$/backendNew/backendNew.iml" />
     </modules>
   </component>
 </project>
-

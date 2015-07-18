@@ -4,4 +4,6 @@
 /.idea/libraries
 .DS_Store
 /apiBackend/build
+/apiBackend2/build
+/backendNew/build
 /build/tmp
