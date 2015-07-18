@@ -216,6 +216,7 @@ public class MainActivity extends ActionBarActivity {
     public void setupAPIS(){
         if(api == null) {
             UserApi.Builder endpoint = new UserApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null);
+            //endpoint.setRootUrl("http://192.168.1.4:8080/_ah/api");
             endpoint.setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
                 @Override
                 public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
@@ -226,6 +227,7 @@ public class MainActivity extends ActionBarActivity {
         }
         if(userAchApi == null) {
             UserAchievementApi.Builder endpoint = new UserAchievementApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null);
+            //endpoint.setRootUrl("http://192.168.1.4:8080/_ah/api");
             endpoint.setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
                 @Override
                 public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
