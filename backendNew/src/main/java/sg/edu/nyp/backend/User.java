@@ -5,7 +5,9 @@ import com.google.api.server.spi.config.ApiResourceProperty;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Ignore;
 import com.googlecode.objectify.annotation.Load;
+import com.googlecode.objectify.annotation.OnLoad;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,12 +26,24 @@ public class User {
     private long points;
     private String profileUrl;
 
-    public String getProfileUrl() {
-        return profileUrl;
+    private double lat;
+    private double lng;
+
+
+    public double getLat() {
+        return lat;
     }
 
-    public void setProfileUrl(String profileUrl) {
-        this.profileUrl = profileUrl;
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLng() {
+        return lng;
+    }
+
+    public void setLng(double lng) {
+        this.lng = lng;
     }
 
     @Load
@@ -38,22 +52,19 @@ public class User {
 
     @Load
     @ApiResourceProperty(ignored = AnnotationBoolean.TRUE)
-    private List<Ref<User>> helped;
-    /*
-    @Load
-    @ApiResourceProperty(ignored = AnnotationBoolean.TRUE)
-    private List<Ref<Post>> posts;
+    private List<Ref<User>> helpedRef;
 
-    public List<Ref<Post>> getPosts() {
-        if(posts == null){
-            posts = new ArrayList<Ref<Post>>();
-        }
-        return posts;
+    @Ignore
+    private ArrayList<User> helpeed;
+
+
+    public ArrayList<User> getHelpeed() {
+        return helpeed;
     }
 
-    public void setPosts(List<Ref<Post>> posts) {
-        this.posts = posts;
-    }*/
+    public void setHelpeed(ArrayList<User> helpeed) {
+        this.helpeed = helpeed;
+    }
 
     public List<Ref<UserAchievement>> getAchievements() {
         if(achievements == null){
@@ -66,14 +77,32 @@ public class User {
         this.achievements = achievements;
     }
 
-    public List<Ref<User>> getHelped() {
-        return helped;
+    public String getProfileUrl() {
+        return profileUrl;
     }
 
-    public void setHelped(List<Ref<User>> helped) {
-        this.helped = helped;
+    public void setProfileUrl(String profileUrl) {
+        this.profileUrl = profileUrl;
+    }
+    public List<Ref<User>> getHelpedRef() {
+        return helpedRef;
     }
 
+    public void setHelpedRef(List<Ref<User>> helpedRef) {
+        if(helpedRef != null){
+
+            helpeed = new ArrayList<User>();
+            for(Ref<User> refHelper : helpedRef){
+                helpeed.add(refHelper.get());
+            }
+            this.helpedRef = helpedRef;
+        }
+    }
+    @OnLoad
+    void populateRefIgnore(){
+        //Trigger to load the entity
+        this.setHelpedRef(this.helpedRef);
+    }
     public String getName() {
         return name;
     }

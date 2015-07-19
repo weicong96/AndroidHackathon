@@ -10,28 +10,16 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:layout_gravity="left"
+            android:id="@+id/tvDescription"
             android:text="Wei Cong has gained Gold Achievement for helping 15 people"/>
-        <TextView
+        <ImageView
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="italic|bold"
             android:gravity="center"
+            android:id="@+id/ivIcon"
             android:text="Image for \nGold Achievement \nhere"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:text="Ethan has gained Silver Achievement for helping 10 people"/>
-    <TextView
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="italic|bold"
-        android:gravity="center"
-        android:text="Image for \nSilver Achievement \nhere"/>
-
 </LinearLayout>

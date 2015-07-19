@@ -1,1 +1,1 @@
-include ':app', ':backendNew'
+include ':app', ':backendNew', ':backend'

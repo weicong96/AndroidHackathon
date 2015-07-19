@@ -10,5 +10,6 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Request For Help"/>
+        android:text="Request For Help"
+        android:id="@+id/btnHelp"/>
 </LinearLayout>

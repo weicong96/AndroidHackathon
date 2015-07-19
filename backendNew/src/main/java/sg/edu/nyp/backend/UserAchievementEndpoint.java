@@ -11,6 +11,7 @@ import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.cmd.Query;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -52,30 +53,6 @@ public class UserAchievementEndpoint {
         // Typically you would register this inside an OfyServive wrapper. See: https://code.google.com/p/objectify-appengine/wiki/BestPractices
         ObjectifyService.register(UserAchievement.class);
     }
-
-    /**
-     * Returns the {@link UserAchievement} with the corresponding ID.
-     *
-     * @param id the ID of the entity to be retrieved
-     * @return the entity with the corresponding ID
-     * @throws NotFoundException if there is no {@code UserAchievement} with the provided ID.
-     */
-    @ApiMethod(
-            name = "get",
-            path = "userAchievement/{id}",
-            httpMethod = ApiMethod.HttpMethod.GET)
-    public UserAchievement get(@Named("id") long id) throws NotFoundException {
-        logger.info("Getting UserAchievement with ID: " + id);
-        UserAchievement userAchievement = ofy().load().type(UserAchievement.class).id(id).now();
-        if (userAchievement == null) {
-            throw new NotFoundException("Could not find UserAchievement with ID: " + id);
-        }
-        return userAchievement;
-    }
-
-    /**
-     * Inserts a new {@code UserAchievement}.
-     */
     @ApiMethod(
             name = "insert",
             path = "userAchievement",
@@ -99,6 +76,18 @@ public class UserAchievementEndpoint {
         }
     }
     @ApiMethod(
+            name="getRecentAchievements",
+            path = "user/recentAchievements",
+            httpMethod = ApiMethod.HttpMethod.GET
+    )
+    public List<UserAchievement> getRecentAchievements(){
+        List<UserAchievement> achievements = ofy().load().type(UserAchievement.class).list();
+        for(int i = 0 ;i < achievements.size();i++){
+            achievements.get(i).getUser().setHelpeed(null);
+        }
+        return achievements;
+    }
+    @ApiMethod(
             name = "getAchievementsForUser",
             path = "user/achievements/{razerID}",
             httpMethod = ApiMethod.HttpMethod.GET)
@@ -113,12 +102,14 @@ public class UserAchievementEndpoint {
 
             ArrayList<Map<String, Object>> map = new ArrayList<Map<String, Object>>();
             Map<String, Object> mapMonths = new HashMap<String,Object>();
+            SimpleDateFormat format = new SimpleDateFormat("MMMMM YYYY");
+
             for(Ref<UserAchievement> ref : user.getAchievements()){
                 UserAchievement ach = ref.get();
                 Calendar cal = Calendar.getInstance();
-                cal.setTime(new Date(ach.getTimeRecieved()/1000));
+                cal.setTime(new Date( ach.getTimeRecieved()));
                 ach.setAchievements(ach.getAchievementsRef().get());
-                if(mapMonths.get("month") != null && mapMonths.get("month").equals(cal.get(Calendar.MONTH))){
+                if(mapMonths.get("month") != null && mapMonths.get("month").equals(format.format(cal.getTime()))){
                     ArrayList<UserAchievement> list = new ArrayList<UserAchievement>(Arrays.asList((UserAchievement[]) mapMonths.get("items")));
                     list.add(ach);
                 }else {
@@ -126,7 +117,9 @@ public class UserAchievementEndpoint {
                     if(mapMonths.size() != 0)
                         map.add(mapMonths);
                     mapMonths = new HashMap<String, Object>();
-                    mapMonths.put("month", cal.get(Calendar.MONTH));
+
+
+                    mapMonths.put("month", format.format(cal.getTime()));
                     mapMonths.put("items", new UserAchievement[]{ach});
                 }
             }
@@ -139,34 +132,6 @@ public class UserAchievementEndpoint {
         }
         return null;
     }
-
-    /**
-     * Updates an existing {@code UserAchievement}.
-     *
-     * @param id              the ID of the entity to be updated
-     * @return the updated version of the entity
-     * @throws NotFoundException if the {@code id} does not correspond to an existing
-     *                           {@code UserAchievement}
-
-    @ApiMethod(
-            name = "update",
-            path = "userAchievement/{id}",
-            httpMethod = ApiMethod.HttpMethod.PUT)
-    public UserAchievement update(@Named("id") long id, UserAchievement userAchievement) throws NotFoundException {
-        // TODO: You should validate your ID parameter against your resource's ID here.
-        checkExists(id);
-        ofy().save().entity(userAchievement).now();
-        logger.info("Updated UserAchievement: " + userAchievement);
-        return ofy().load().entity(userAchievement).now();
-    }
-
-
-     * Deletes the specified {@code UserAchievement}.
-     *
-     * @param id the ID of the entity to delete
-     * @throws NotFoundException if the {@code id} does not correspond to an existing
-     *                           {@code UserAchievement}
-     */
     @ApiMethod(
             name = "remove",
             path = "userAchievement/{id}",
@@ -175,31 +140,6 @@ public class UserAchievementEndpoint {
         checkExists(id);
         ofy().delete().type(UserAchievement.class).id(id).now();
         logger.info("Deleted UserAchievement with ID: " + id);
-    }
-
-    /**
-     * List all entities.
-     *
-     * @param cursor used for pagination to determine which page to return
-     * @param limit  the maximum number of entries to return
-     * @return a response that encapsulates the result list and the next page token/cursor
-     */
-    @ApiMethod(
-            name = "list",
-            path = "userAchievement",
-            httpMethod = ApiMethod.HttpMethod.GET)
-    public CollectionResponse<UserAchievement> list(@Nullable @Named("cursor") String cursor, @Nullable @Named("limit") Integer limit) {
-        limit = limit == null ? DEFAULT_LIST_LIMIT : limit;
-        Query<UserAchievement> query = ofy().load().type(UserAchievement.class).limit(limit);
-        if (cursor != null) {
-            query = query.startAt(Cursor.fromWebSafeString(cursor));
-        }
-        QueryResultIterator<UserAchievement> queryIterator = query.iterator();
-        List<UserAchievement> userAchievementList = new ArrayList<UserAchievement>(limit);
-        while (queryIterator.hasNext()) {
-            userAchievementList.add(queryIterator.next());
-        }
-        return CollectionResponse.<UserAchievement>builder().setItems(userAchievementList).setNextPageToken(queryIterator.getCursor().toWebSafeString()).build();
     }
 
     private void checkExists(long id) throws NotFoundException {

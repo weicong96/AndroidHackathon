@@ -18,6 +18,7 @@ public enum AchievementsENUM {
         Achievements ach = new Achievements();
         ach.setAchievementID(_enum.id);
         ach.setAchievementTitle(_enum.title);
+
         return ach;
     }
 }

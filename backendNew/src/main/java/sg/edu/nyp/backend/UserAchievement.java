@@ -7,7 +7,9 @@ import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Ignore;
 import com.googlecode.objectify.annotation.Load;
+import com.googlecode.objectify.annotation.OnLoad;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,6 +20,43 @@ public class UserAchievement {
     @Id
     private String id;
 
+    @Load
+    @ApiResourceProperty(ignored = AnnotationBoolean.TRUE)
+    private Ref<Achievements> achievementsRef;
+
+    @Ignore
+    private User User;
+
+    @Load
+    @ApiResourceProperty(ignored = AnnotationBoolean.TRUE)
+    private Ref<User> userRef;
+
+    @Ignore
+    private Achievements achievements;
+
+    private long timeRecieved;
+
+    @OnLoad
+    void populateNonRef(){
+        User = userRef.get();
+        achievements = achievementsRef.get();
+    }
+    public User getUser() {
+        return User;
+    }
+
+    public void setUser(User user) {
+        User = user;
+    }
+
+    public Ref<User> getUserRef() {
+        return userRef;
+    }
+
+    public void setUserRef(Ref<User> userRef) {
+        this.userRef = userRef;
+    }
+
     public String getId() {
         return id;
     }
@@ -26,10 +65,6 @@ public class UserAchievement {
         this.id = id;
     }
 
-    private long timeRecieved;
-    @Load
-    @ApiResourceProperty(ignored = AnnotationBoolean.TRUE)
-    private Ref<Achievements> achievementsRef;
 
     public long getTimeRecieved() {
         return timeRecieved;
@@ -55,9 +90,6 @@ public class UserAchievement {
     public void setAchievements(Achievements achievements) {
         this.achievements = achievements;
     }
-
-    @Ignore
-    private Achievements achievements;
 
 
 }

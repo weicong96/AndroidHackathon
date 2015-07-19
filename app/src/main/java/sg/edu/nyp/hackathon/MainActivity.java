@@ -1,7 +1,10 @@
 package sg.edu.nyp.hackathon;
 
+import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,11 +19,15 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
 import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
+import com.google.api.client.util.ArrayMap;
 import com.razer.android.nabuopensdk.NabuOpenSDK;
 import com.razer.android.nabuopensdk.interfaces.Hi5Listener;
+import com.razer.android.nabuopensdk.interfaces.PulseListener;
 import com.razer.android.nabuopensdk.models.Hi5Data;
+import com.razer.android.nabuopensdk.models.PulseData;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -36,24 +43,26 @@ import sg.edu.nyp.backend.userAchievementApi.model.UserAchievement;
 import sg.edu.nyp.backend.userApi.UserApi;
 import sg.edu.nyp.backend.userApi.model.User;
 import sg.edu.nyp.backend.userAchievementApi.UserAchievementApi;
+import sg.edu.nyp.backend.userApi.model.UserCollection;
 
 
 public class MainActivity extends ActionBarActivity {
-    static NabuOpenSDK nabuOpenSDK = null;
-    String nabuAPPID;
-
     SharedPreferences preferences;
 
     ProgressBar pgPoints;
     TextView tvProgress;
+    TextView tvHelpedCount;
 
     public User user;
     private LinearLayout llAchievementsByMonth;
 
     //Allow the ui to refresh without reopening activity
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     public void refreshUI(){
         setupAPIS();
+        tvHelpedCount = (TextView) findViewById(R.id.tvHelpedCount);
 
+        llAchievementsByMonth.removeAllViews();
         try {
             LoginUtils.getInstance(getBaseContext()).refreshUser();
             user = LoginUtils.getInstance(getBaseContext()).getUser();
@@ -66,8 +75,8 @@ public class MainActivity extends ActionBarActivity {
             //Populate Achievements view with a list of items
             for(Map<String,Object> month : achGrpByMonth){
                 //Months will never repeat because it has been handled on server side
-                String monthText = (String)month.get("month");
-                UserAchievement[] achievements = (UserAchievement[]) month.get("items");
+                String monthText = String.valueOf(month.get("month"));
+                ArrayList<ArrayMap<String, Object>> achievements =  (ArrayList<ArrayMap<String, Object>>)month.get("items");
 
                 //Inflater layout instead?
                 View template = LayoutInflater.from(this).inflate(R.layout.single_achievementmonth, null);
@@ -76,15 +85,24 @@ public class MainActivity extends ActionBarActivity {
 
                 tvMonth.setText(monthText);
                 ArrayList<Achievements> achievementsList = new ArrayList<Achievements>();
-                for(UserAchievement userAch : achievements){
-                    achievementsList.add(userAch.getAchievements());
+                for(ArrayMap<String, Object> userAch : achievements){
+                    String id = (String)userAch.get("id");
+                    String timeRecieved = (String) userAch.get("timeRecieved");
+                    ArrayMap<String, String> achievementsRef = (ArrayMap<String, String>)userAch.get("achievements");
+
+                    Achievements achievement = new Achievements();
+                    achievement.setAchievementID(Long.valueOf(achievementsRef.get("achievementID")));
+                    achievement.setAchievementTitle(achievementsRef.get("achievementID"));
+
+                    achievementsList.add(achievement);
                 }
                 gridView.setAdapter(new AchievementsAdapter(this, achievementsList));
 
-                llAchievementsByMonth.addView(tvMonth);
-                llAchievementsByMonth.addView(gridView);
+                llAchievementsByMonth.addView(template);
             }
-
+            UserCollection collection = new GetHelpees().execute(user.getRazerID()).get();
+            if(collection != null)
+                tvHelpedCount.setText("Helped "+String.valueOf(collection.getItems().size())+" people this month");
             pgPoints.setProgress((int)(user.getPoints() / 100));
             tvProgress.setText(user.getPoints()+" / 100 points");
         } catch (InterruptedException e) {
@@ -101,34 +119,12 @@ public class MainActivity extends ActionBarActivity {
         llAchievementsByMonth = (LinearLayout) findViewById(R.id.llAchievementsByMonth);
         pgPoints = (ProgressBar) findViewById(R.id.pbPoints);
         tvProgress = (TextView) findViewById(R.id.tvProgress);
-
         refreshUI();
 
-        nabuOpenSDK = nabuOpenSDK.getInstance(this);
-        nabuAPPID = getResources().getString(R.string.NABU_APP_ID);
+        Intent intent = new Intent(this, PollingService.class);
+        intent.putExtra("userID", user.getRazerID());
+        startService(intent);
 
-        //Handhsake can be done here or in a new thread
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask(){
-
-            @Override
-            public void run() {
-                Calendar c = Calendar.getInstance();
-                c.add(Calendar.DAY_OF_MONTH, -1);
-                nabuOpenSDK.getHi5Data(MainActivity.this, c.getTimeInMillis(), System.currentTimeMillis(), new Hi5Listener() {
-                    @Override
-                    public void onReceiveData(Hi5Data[] hi5Datas) {
-                        if(hi5Datas.length != 0)
-                            System.out.println("Recieved");
-                    }
-
-                    @Override
-                    public void onReceiveFailed(String s) {
-                        System.out.println(s);
-                    }
-                });
-            }
-        }, 0, 5000);
     }
 
 
@@ -152,57 +148,28 @@ public class MainActivity extends ActionBarActivity {
         }else if(id == R.id.shake){
             shook(user);
         }else if(id == R.id.activity){
-           // Intent intent = new Intent(this, PostsActivity.class);
-            //startActivity(intent);
+           Intent intent = new Intent(this, WhatsHappeningActivity.class);
+           startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
     }
-
-    public void shook(User user){//This method handles what happens when the other user shakes hand with you.
-        //Add Points
+    public void shook(User user){
         try {
-            new GivePoints().execute().get();
+            new GivePoints().execute(user.getRazerID(), "HELPEEID").get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        //Add Activities
-        //Share to facebook?
-
-        //find some way to refresh UI here
         refreshUI();
     }
-
-
-    private class GetAchievements extends AsyncTask<User, Void, List<Map<String, Object>>>{
-
+    private class GivePoints extends AsyncTask<String,Void, User> {
         @Override
-        protected List<Map<String, Object>> doInBackground(User... users) {
+        protected User doInBackground(String... user) {
             try {
-                List<JsonMap> listMap = userAchApi.getAchievementsForUser(users[0].getRazerID()).execute().getItems();
-                ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-                if(listMap != null)
-                    for(JsonMap item : listMap){
-                        Map<String,Object> single = new HashMap<String, Object>();
-                        single.put("month", item.get("month"));
-                        single.put("items", item.get("items"));
-                        list.add(single);
-                    }
-
-                return list;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-    }
-    private class GivePoints extends AsyncTask<User,Void, User>{
-        @Override
-        protected User doInBackground(User... params) {
-            try {
-                User newUser = api.addPoint(user.getRazerID(), "HELPEEID").execute();
+                User newUser = api.addPoint(user[0], user[1]).execute();
+                System.out.println("Insert data nw");
                 return newUser;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -237,5 +204,39 @@ public class MainActivity extends ActionBarActivity {
             userAchApi = endpoint.build();
         }
     }
+    private class GetAchievements extends AsyncTask<User, Void, List<Map<String, Object>>>{
 
+        @Override
+        protected List<Map<String, Object>> doInBackground(User... users) {
+            try {
+                List<JsonMap> listMap = userAchApi.getAchievementsForUser(users[0].getRazerID()).execute().getItems();
+                ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+                if(listMap != null)
+                    for(JsonMap item : listMap){
+                        Map<String,Object> single = new HashMap<String, Object>();
+                        single.put("month", item.get("month"));
+                        single.put("items", item.get("items"));
+                        list.add(single);
+                    }
+
+                return list;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+    private class GetHelpees extends AsyncTask<String,Void, UserCollection>{
+        @Override
+        protected UserCollection doInBackground(String... params) {
+            try {
+                UserCollection newUser = api.getHelpees(params[0]).execute();
+                return newUser;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+            //return null;
+        }
+    }
 }

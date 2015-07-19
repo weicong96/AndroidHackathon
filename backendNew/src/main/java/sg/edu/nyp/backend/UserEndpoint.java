@@ -7,6 +7,7 @@ import com.google.api.server.spi.response.CollectionResponse;
 import com.google.api.server.spi.response.NotFoundException;
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.api.datastore.QueryResultIterator;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.cmd.Query;
@@ -14,12 +15,8 @@ import com.googlecode.objectify.cmd.Query;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.annotation.Nullable;
@@ -53,6 +50,7 @@ public class UserEndpoint {
     static {
         // Typically you would register this inside an OfyServive wrapper. See: https://code.google.com/p/objectify-appengine/wiki/BestPractices
         ObjectifyService.register(User.class);
+        ObjectifyService.register(UserLocation.class);
     }
 
     /**
@@ -145,39 +143,85 @@ public class UserEndpoint {
             throw new NotFoundException("Could not find User with ID: " + razerID);
         }
     }
+    @ApiMethod(
+            name="getHelpees",
+            path="helpee",
+            httpMethod = ApiMethod.HttpMethod.GET
+    )
+    public List<User> getHelpees(@Named("razerID") String razerID){
+        try {
+            User user = this.get(razerID);
+            return user.getHelpeed();
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    @ApiMethod(
+            name = "requestHelp",
+            path = "requestHelp/{razerID}",
+            httpMethod= ApiMethod.HttpMethod.GET
+    )
+    public void requestHelp(@Named("razerID") String razerID, @Named("lat") double lat, @Named("lng")double lng){
+        List<User> users = ofy().load().type(User.class).list();
+        //Go to database, find something that is
+        for(User user : users){
+            
+        }
+    }
+    @ApiMethod(
+            name = "updateLocation",
+            path = "updateLocation/{razerID}",
+            httpMethod= ApiMethod.HttpMethod.GET
+    )
+    public void updateLocation(@Named("razerID") String razerID, @Named("lat") double lat, @Named("lng") double lng){
+        try {
+            User user = this.get(razerID);
+            user.setLat(lat);
+            user.setLng(lng);
+            ofy().save().entity(user).now();
 
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
+    }
     @ApiMethod(
             name = "addPoint",
             path = "addPoints/{razerID}",
             httpMethod= ApiMethod.HttpMethod.GET
     )
+
     public User addPointsForUser(@Named("razerID") String razerID, @Named("targetUser") String otherUserID){
         try {
             checkExists(razerID);
             User user = this.get(razerID);
-            user.setPoints(user.getPoints() + 1);
 
             //Check if user has been helped?
-            List<Ref<User>> helped = user.getHelped();
+            List<Ref<User>> helped = user.getHelpedRef();
             if(helped == null)
                 helped = new ArrayList<Ref<User>>();
             User targetUser = this.get(otherUserID);
-            if(targetUser.isNeedy()) {
+
+            //Check if user is registered in system AND needy
+            if(targetUser != null && targetUser.isNeedy()) {
                 helped.add(Ref.create(targetUser));
-                user.setHelped(helped);
+                user.setHelpedRef(helped);
 
-
+                int addPoints = 0;
                 //Add achievement
                 Achievements newAchievement = null;
-                if (helped.size() >= 3) {
+                if (helped.size() >= 5) {
                     //Check if got achievements already
                     newAchievement = AchievementsENUM.getAchivements(AchievementsENUM.UNIQUE_THREE);
-                }
-                if (helped.size() >= 7) {
-                    newAchievement = AchievementsENUM.getAchivements(AchievementsENUM.UNIQUE_SEVEN);
+                    addPoints = 3;
                 }
                 if (helped.size() >= 10) {
+                    newAchievement = AchievementsENUM.getAchivements(AchievementsENUM.UNIQUE_SEVEN);
+                    addPoints = 5;
+                }
+                if (helped.size() >= 15) {
                     newAchievement = AchievementsENUM.getAchivements(AchievementsENUM.UNIQUE_TEN);
+                    addPoints = 8;
                 }
                 if (gotAchievements(newAchievement, user)) {
                     newAchievement = null;
@@ -188,6 +232,7 @@ public class UserEndpoint {
                     userach.setId(razerID+formatter.format(user.getAchievements().size()));
                     userach.setTimeRecieved(Calendar.getInstance().getTimeInMillis());
                     userach.setAchievementsRef(Ref.create(newAchievement));
+                    userach.setUserRef(Ref.create(user));
 
                     ofy().save().entity(userach).now();
                     userach = ofy().load().entity(userach).now();
@@ -198,6 +243,8 @@ public class UserEndpoint {
                         list = new ArrayList<Ref<UserAchievement>>();
 
                     list.add(refAch);
+
+                    user.setPoints(user.getPoints() + addPoints);
                     user.setAchievements(list);
                 }
                 ofy().save().entity(user).now();
