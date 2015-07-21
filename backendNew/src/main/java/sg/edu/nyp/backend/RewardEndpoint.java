@@ -68,24 +68,6 @@ public class RewardEndpoint {
     }
 
     /**
-     * Inserts a new {@code Reward}.
-     */
-    @ApiMethod(
-            name = "insert",
-            path = "reward",
-            httpMethod = ApiMethod.HttpMethod.POST)
-    public Reward insert(Reward reward) {
-        // Typically in a RESTful API a POST does not have a known ID (assuming the ID is used in the resource path).
-        // You should validate that reward.id has not been set. If the ID type is not supported by the
-        // Objectify ID generator, e.g. long or String, then you should generate the unique ID yourself prior to saving.
-        //
-        // If your client provides the ID then you should probably use PUT instead.
-        ofy().save().entity(reward).now();
-        logger.info("Created Reward with ID: " + reward.getId());
-
-        return ofy().load().entity(reward).now();
-    }
-    /**
      * List all entities.
      *
      * @param cursor used for pagination to determine which page to return

@@ -12,8 +12,6 @@ import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.cmd.Query;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -51,6 +49,9 @@ public class UserEndpoint {
         // Typically you would register this inside an OfyServive wrapper. See: https://code.google.com/p/objectify-appengine/wiki/BestPractices
         ObjectifyService.register(User.class);
         ObjectifyService.register(UserLocation.class);
+        ObjectifyService.register(UserReward.class);
+        ObjectifyService.register(Reward.class);
+
     }
 
     /**
@@ -207,9 +208,11 @@ public class UserEndpoint {
                 helped.add(Ref.create(targetUser));
                 user.setHelpedRef(helped);
 
+                giveReward(user, razerID, );
                 int addPoints = 0;
                 //Add achievement
                 Achievements newAchievement = null;
+
                 if (helped.size() >= 5) {
                     //Check if got achievements already
                     newAchievement = AchievementsENUM.getAchivements(AchievementsENUM.UNIQUE_THREE);
@@ -228,8 +231,7 @@ public class UserEndpoint {
                 }
                 if (newAchievement != null) {
                     UserAchievement userach = new UserAchievement();
-                    NumberFormat formatter = new DecimalFormat("0000000");
-                    userach.setId(razerID+formatter.format(user.getAchievements().size()));
+
                     userach.setTimeRecieved(Calendar.getInstance().getTimeInMillis());
                     userach.setAchievementsRef(Ref.create(newAchievement));
                     userach.setUserRef(Ref.create(user));
@@ -251,6 +253,32 @@ public class UserEndpoint {
             }
             return ofy().load().entity(user).now();
 
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    private User giveReward(User user, String razerID, Long rewardID){
+        //Create UserReward
+        UserReward userReward = new UserReward();
+        try {
+            //Can put all reward logic here
+            userReward.setUserRef(Ref.create(this.get(razerID)));
+
+            Reward rewardEntity = new Reward();
+            rewardEntity.setId(rewardID);
+            rewardEntity = ofy().load().entity(rewardEntity).now();
+            userReward.setRewardRef(Ref.create(rewardEntity));
+
+            //Create user reward and save in db
+            Key<UserReward> key = ofy().save().entity(userReward).now();
+
+            //Append to userreward
+            List<Ref<UserReward>> rewards = user.getRewardsRef();
+            rewards.add(Ref.create(key));
+            user.setRewardsRef(rewards);
+
+            return user;
         } catch (NotFoundException e) {
             e.printStackTrace();
         }

@@ -10,4 +10,5 @@
     <string name="NABU_APP_ID">c5157886059dc605e914ce5c81b33f6dfe9fba19</string>
     <string name="title_activity_whats_happening">WhatsHappeningActivity</string>
     <string name="title_activity_needy">NeedyActivity</string>
+    <string name="title_activity_events_upcoming">EventsUpcomingActivity</string>
 </resources>

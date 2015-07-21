@@ -10,7 +10,7 @@ import com.googlecode.objectify.annotation.Id;
 @Entity
 public class Reward {
     @Id
-    private long id;
+    private Long id;
     private String name;
     private String image;
 

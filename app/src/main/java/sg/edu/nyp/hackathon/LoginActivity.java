@@ -9,8 +9,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import sg.edu.nyp.hackathon.R;
 
-import com.example.admin.myapplication.backend.messaging.Messaging;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
@@ -41,6 +41,7 @@ public class LoginActivity extends ActionBarActivity {
         setupAPIS();
         loginUtils = LoginUtils.getInstance(this);
         loginUtils.loginFromDevice();
+
         try {
             new GCMRegistrationTask(this).execute().get();
         } catch (InterruptedException e) {
@@ -48,6 +49,7 @@ public class LoginActivity extends ActionBarActivity {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+
         if(loginUtils.isLoggedIn()){
             //If logged in , continue with rest of app
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);

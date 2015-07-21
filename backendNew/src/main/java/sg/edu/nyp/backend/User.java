@@ -54,6 +54,29 @@ public class User {
     @ApiResourceProperty(ignored = AnnotationBoolean.TRUE)
     private List<Ref<User>> helpedRef;
 
+    @Load
+    @ApiResourceProperty(ignored = AnnotationBoolean.TRUE)
+    private List<Ref<UserReward>> rewardsRef;
+
+    @Ignore
+    private List<UserReward> rewards;
+
+    public List<Ref<UserReward>> getRewardsRef() {
+        return rewardsRef;
+    }
+
+    public void setRewardsRef(List<Ref<UserReward>> rewardsRef) {
+        this.rewardsRef = rewardsRef;
+    }
+
+    public List<UserReward> getRewards() {
+        return rewards;
+    }
+
+    public void setRewards(List<UserReward> rewards) {
+        this.rewards = rewards;
+    }
+
     @Ignore
     private ArrayList<User> helpeed;
 
@@ -102,6 +125,9 @@ public class User {
     void populateRefIgnore(){
         //Trigger to load the entity
         this.setHelpedRef(this.helpedRef);
+        for(Ref<UserReward> rewardRef : rewardsRef ){
+
+        }
     }
     public String getName() {
         return name;

@@ -2,6 +2,174 @@
 <items version="2" >
 
     <item
+        jar="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/exploded-aar/com.android.support/multidex/1.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="6666dd525c3da197e7d07f4f23ef5fc7881a697b">
+        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/classes-d933a1768c14ff830567b2e67da21b7b70f461d7.jar" />
+    </item>
+    <item
+        jar="/Users/admin/.gradle/caches/modules-2/files-2.1/com.squareup.retrofit/retrofit/1.9.0/a681c044244d9fc375198588297a39ba78028423/retrofit-1.9.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="a681c044244d9fc375198588297a39ba78028423">
+        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/retrofit-1.9.0-5e8bb9336970cc9f413629fea1054f6f417a0c95.jar" />
+    </item>
+    <item
+        jar="/Users/admin/.gradle/caches/modules-2/files-2.1/com.google.oauth-client/google-oauth-client/1.19.0/d473a8962e14a707a3716637e4898bb2dd9643f2/google-oauth-client-1.19.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="d473a8962e14a707a3716637e4898bb2dd9643f2">
+        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/google-oauth-client-1.19.0-7476dafd1655723cce0d073a42b19152639d86e9.jar" />
+    </item>
+    <item
+        jar="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-safetynet/7.5.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="1a6411087ab88ce5542f593e63a2752b6b0d6f1a">
+        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/classes-ad18aeffaa0e0b5a6fd29af483124aa849f818a0.jar" />
+    </item>
+    <item
+        jar="/Users/admin/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client/1.19.0/cdca49ad0977c040f603478aa2e16b2775c8fec6/google-http-client-1.19.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="cdca49ad0977c040f603478aa2e16b2775c8fec6">
+        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/google-http-client-1.19.0-b650f815961827a886e0edd500d7773195b69349.jar" />
+    </item>
+    <item
+        jar="/Users/admin/.gradle/caches/modules-2/files-2.1/com.google.api-client/google-api-client/1.19.0/6a21277d9bebe267b7ddee028b241eebc756c040/google-api-client-1.19.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="6a21277d9bebe267b7ddee028b241eebc756c040">
+        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/google-api-client-1.19.0-ee4286fdd3658968ba938de0e92a4f3a53d1cd5d.jar" />
+    </item>
+    <item
+        jar="/Users/admin/Desktop/AndroidHackathon/app/libs/nabuopensdk_final.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="d137751d2f0c43ccb4f0ad2d56252e98636cb1d9">
+        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/nabuopensdk_final-616ced2a73c7a48b5cd24264c53c7b35a8f9c54d.jar" />
+    </item>
+    <item
+        jar="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appstate/7.5.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="68c140702c7242d914655bcb3164d9e8c45b84cb">
+        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/classes-0d4aa739fe87637e4e1d25cd01aeb5d33d9f4011.jar" />
+    </item>
+    <item
+        jar="/Users/admin/.gradle/caches/modules-2/files-2.1/com.google.api-client/google-api-client-android/1.19.0/ba2aafb867f6af469f936ae76426cf0a280094bd/google-api-client-android-1.19.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="ba2aafb867f6af469f936ae76426cf0a280094bd">
+        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/google-api-client-android-1.19.0-70dcce050d2dfb1b23982e61e6fd5d8d64c017e9.jar" />
+    </item>
+    <item
+        jar="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wearable/7.5.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="69dd177337ead693c408c8dddc9546bb6f1244fa">
+        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/classes-6a0cd26926bf21fb0c5eecc9111d8bfe1e074a4f.jar" />
+    </item>
+    <item
+        jar="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-gcm/7.5.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="8d736fefa22d896e84a268354b3ed48a42663150">
+        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/classes-6cb2489e1d83ada437ffe98b128df62c6a7ff23b.jar" />
+    </item>
+    <item
+        jar="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-drive/7.5.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="f44d03c138cb6488fdbaa65e3a7e5878861a56d8">
+        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/classes-b2805e519aa092dc33c86e1f3e676235a42a5274.jar" />
+    </item>
+    <item
+        jar="/Users/admin/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.0/support-annotations-22.2.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="66b42a1f3eb7676070b7ef7f14b603483aecbee1">
+        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/support-annotations-22.2.0-0f1c521143cf9cb8037937ea6716bb3a33e0f379.jar" />
+    </item>
+    <item
+        jar="/Users/admin/Desktop/AndroidHackathon/backendNew/build/libs/backendNew-android-endpoints.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="9ac68513df7de0af568c6643c35303118d623095">
+        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/backendNew-android-endpoints-485dae65a875cc2f17647eaecea61fc4e994b0fa.jar" />
+    </item>
+    <item
+        jar="/Users/admin/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.3.1/ecb6e1f8e4b0e84c4b886c2f14a1500caf309757/gson-2.3.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
+        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/gson-2.3.1-0f7b1b0ee078bfa3c4bee106f0d44cf00d6be241.jar" />
+    </item>
+    <item
+        jar="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appinvite/7.5.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="63ec6e9f4fe5482a7447d0f3091b8e543a02554c">
+        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/classes-099084e87d0b388f01980c15666c5deec61a7d4c.jar" />
+    </item>
+    <item
+        jar="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/7.5.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="29ebc7e04d877062317c8cc0e68b20f0c1fcda66">
+        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/classes-4dbec0752424fdde860aa626f1850194967707f9.jar" />
+    </item>
+    <item
+        jar="/Users/admin/Desktop/AndroidHackathon/app/libs/volley.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="8d62b91f5ccb6f7f872313191c016c03bb61a792">
+        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/volley-e1a09cb493d8e63b18c682951574814c8d07bc83.jar" />
+    </item>
+    <item
+        jar="/Users/admin/Desktop/AndroidHackathon/app/libs/jackson-databind-2.2.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="03ae380888029daefb91d3ecdca3a37d8cb92bc9">
+        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/jackson-databind-2.2.3-75fa39cba940c68309f12f09e16c666fab5b7193.jar" />
+    </item>
+    <item
+        jar="/Users/admin/Desktop/AndroidHackathon/app/libs/jackson-annotations-2.2.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="0527fece4f23a457070a36c371a26d6c0208e1c3">
+        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/jackson-annotations-2.2.3-bf44f45df23214fa62b460d34a22b198b811ab5e.jar" />
+    </item>
+    <item
+        jar="/Users/admin/.gradle/caches/modules-2/files-2.1/com.google.code.findbugs/jsr305/1.3.9/40719ea6961c0cb6afaeb6a921eaa1f6afd4cfdf/jsr305-1.3.9.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="40719ea6961c0cb6afaeb6a921eaa1f6afd4cfdf">
+        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/jsr305-1.3.9-d69b38027b485032b3e6f2912d58d2fc2d3a1805.jar" />
+    </item>
+    <item
+        jar="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.5.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="a78183f30e769a98ab4820794f597763088d3065">
+        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/classes-6f4f672860341006830f87570034c8835818b21b.jar" />
+    </item>
+    <item
+        jar="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-panorama/7.5.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="ba207be21987c11b37d9f8faa08ed6e722569f30">
+        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/classes-ab3b8f174aabd7ae1b2b23ce2236d17a73d8c28d.jar" />
+    </item>
+    <item
+        jar="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-games/7.5.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="02bac2dc792d78241077861566f2c82da955e7fa">
+        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/classes-8488f4129cc71d3c20ae8e82ab37b18bab3c46a5.jar" />
+    </item>
+    <item
         jar="/Users/admin/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client-jackson2/1.19.0/81dbf9795d387d5e80e55346582d5f2fb81a42eb/google-http-client-jackson2-1.19.0.jar"
         jumboMode="false"
         revision="21.1.2"
@@ -40,29 +208,8 @@
         jar="/Users/admin/Desktop/AndroidHackathon/backend/build/libs/backend-android-endpoints.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="cb1c6d4bb295a5d6c902a4c476c2f0483a575b45">
+        sha1="167e2009b49f231472a95702140b01eb555bccc9">
         <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/backend-android-endpoints-21efb18a4bc921ab52f72abc165cf45569d1d0e3.jar" />
-    </item>
-    <item
-        jar="/Users/admin/.gradle/caches/modules-2/files-2.1/com.squareup.retrofit/retrofit/1.9.0/a681c044244d9fc375198588297a39ba78028423/retrofit-1.9.0.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="a681c044244d9fc375198588297a39ba78028423">
-        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/retrofit-1.9.0-5e8bb9336970cc9f413629fea1054f6f417a0c95.jar" />
-    </item>
-    <item
-        jar="/Users/admin/.gradle/caches/modules-2/files-2.1/com.google.oauth-client/google-oauth-client/1.19.0/d473a8962e14a707a3716637e4898bb2dd9643f2/google-oauth-client-1.19.0.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="d473a8962e14a707a3716637e4898bb2dd9643f2">
-        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/google-oauth-client-1.19.0-7476dafd1655723cce0d073a42b19152639d86e9.jar" />
-    </item>
-    <item
-        jar="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/7.5.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="1e98ef3f124bb7a11f8575f9ff5dfea330b61b6f">
-        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/classes-39b869f7e961141067803b32aa3a9b29270e867b.jar" />
     </item>
     <item
         jar="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-nearby/7.5.0/classes.jar"
@@ -70,6 +217,13 @@
         revision="21.1.2"
         sha1="6440e5e5cfe368f9bff3c537fb8988048069cb33">
         <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/classes-57b2ffe9ddcc33e90708a4f06d3b8cb6c4b2ba50.jar" />
+    </item>
+    <item
+        jar="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/7.5.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="1e98ef3f124bb7a11f8575f9ff5dfea330b61b6f">
+        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/classes-39b869f7e961141067803b32aa3a9b29270e867b.jar" />
     </item>
     <item
         jar="/Users/admin/.gradle/caches/modules-2/files-2.1/com.google.guava/guava-jdk5/13.0/381ae6c8add7c98e9bcddb1e0b898400cd6fc3f7/guava-jdk5-13.0.jar"
@@ -86,39 +240,11 @@
         <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/internal_impl-22.0.0-5ef6d72c237dd5b2d6c5a3f7adc8580f434a76c6.jar" />
     </item>
     <item
-        jar="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-safetynet/7.5.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="1a6411087ab88ce5542f593e63a2752b6b0d6f1a">
-        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/classes-ad18aeffaa0e0b5a6fd29af483124aa849f818a0.jar" />
-    </item>
-    <item
-        jar="/Users/admin/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client/1.19.0/cdca49ad0977c040f603478aa2e16b2775c8fec6/google-http-client-1.19.0.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="cdca49ad0977c040f603478aa2e16b2775c8fec6">
-        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/google-http-client-1.19.0-b650f815961827a886e0edd500d7773195b69349.jar" />
-    </item>
-    <item
-        jar="/Users/admin/.gradle/caches/modules-2/files-2.1/com.google.api-client/google-api-client/1.19.0/6a21277d9bebe267b7ddee028b241eebc756c040/google-api-client-1.19.0.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="6a21277d9bebe267b7ddee028b241eebc756c040">
-        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/google-api-client-1.19.0-ee4286fdd3658968ba938de0e92a4f3a53d1cd5d.jar" />
-    </item>
-    <item
         jar="/Users/admin/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.1.3/f6c3aed1cdfa21b5c1737c915186ea93a95a58bd/jackson-core-2.1.3.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="f6c3aed1cdfa21b5c1737c915186ea93a95a58bd">
         <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/jackson-core-2.1.3-98f3e6d4a2c619ed4583713ffed755cd2606908d.jar" />
-    </item>
-    <item
-        jar="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-maps/7.5.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="06a42becc33232ec0ee125161da68c1829c9f8fd">
-        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/classes-946ff2943fbd6e36685178c386ac0af2b50217c5.jar" />
     </item>
     <item
         jar="/Users/admin/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client-android/1.19.0/e3f11020c2c812112803d252d1392872d3f619c8/google-http-client-android-1.19.0.jar"
@@ -128,18 +254,11 @@
         <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/google-http-client-android-1.19.0-1df2a82abdddb2f739625fe8e519b5a9733f76f1.jar" />
     </item>
     <item
-        jar="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appstate/7.5.0/classes.jar"
+        jar="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-maps/7.5.0/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="68c140702c7242d914655bcb3164d9e8c45b84cb">
-        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/classes-0d4aa739fe87637e4e1d25cd01aeb5d33d9f4011.jar" />
-    </item>
-    <item
-        jar="/Users/admin/Desktop/AndroidHackathon/app/libs/nabuopensdk_final.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="d137751d2f0c43ccb4f0ad2d56252e98636cb1d9">
-        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/nabuopensdk_final-616ced2a73c7a48b5cd24264c53c7b35a8f9c54d.jar" />
+        sha1="06a42becc33232ec0ee125161da68c1829c9f8fd">
+        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/classes-946ff2943fbd6e36685178c386ac0af2b50217c5.jar" />
     </item>
     <item
         jar="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-cast/7.5.0/classes.jar"
@@ -149,53 +268,11 @@
         <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/classes-a009119e08b833c13fb6c9ff8787d7b2f6b55b5f.jar" />
     </item>
     <item
-        jar="/Users/admin/.gradle/caches/modules-2/files-2.1/com.google.api-client/google-api-client-android/1.19.0/ba2aafb867f6af469f936ae76426cf0a280094bd/google-api-client-android-1.19.0.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="ba2aafb867f6af469f936ae76426cf0a280094bd">
-        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/google-api-client-android-1.19.0-70dcce050d2dfb1b23982e61e6fd5d8d64c017e9.jar" />
-    </item>
-    <item
-        jar="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wearable/7.5.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="69dd177337ead693c408c8dddc9546bb6f1244fa">
-        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/classes-6a0cd26926bf21fb0c5eecc9111d8bfe1e074a4f.jar" />
-    </item>
-    <item
-        jar="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-gcm/7.5.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="8d736fefa22d896e84a268354b3ed48a42663150">
-        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/classes-6cb2489e1d83ada437ffe98b128df62c6a7ff23b.jar" />
-    </item>
-    <item
-        jar="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-drive/7.5.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="f44d03c138cb6488fdbaa65e3a7e5878861a56d8">
-        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/classes-b2805e519aa092dc33c86e1f3e676235a42a5274.jar" />
-    </item>
-    <item
-        jar="/Users/admin/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.0/support-annotations-22.2.0.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="66b42a1f3eb7676070b7ef7f14b603483aecbee1">
-        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/support-annotations-22.2.0-0f1c521143cf9cb8037937ea6716bb3a33e0f379.jar" />
-    </item>
-    <item
         jar="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-fitness/7.5.0/classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="a172852a35ff919e85b9b7f14bbc15c5bee25520">
         <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/classes-beaf636f38bac311b72dffffee57dc4af442d1bc.jar" />
-    </item>
-    <item
-        jar="/Users/admin/Desktop/AndroidHackathon/backendNew/build/libs/backendNew-android-endpoints.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="373adc612c7b94d6f7ed852bb36bda4841eb69ed">
-        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/backendNew-android-endpoints-485dae65a875cc2f17647eaecea61fc4e994b0fa.jar" />
     </item>
     <item
         jar="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appindexing/7.5.0/classes.jar"
@@ -205,39 +282,11 @@
         <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/classes-2b2aed0050224d0cbb58d2b0ed8727f842cf6086.jar" />
     </item>
     <item
-        jar="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appinvite/7.5.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="63ec6e9f4fe5482a7447d0f3091b8e543a02554c">
-        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/classes-099084e87d0b388f01980c15666c5deec61a7d4c.jar" />
-    </item>
-    <item
-        jar="/Users/admin/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.3.1/ecb6e1f8e4b0e84c4b886c2f14a1500caf309757/gson-2.3.1.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
-        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/gson-2.3.1-0f7b1b0ee078bfa3c4bee106f0d44cf00d6be241.jar" />
-    </item>
-    <item
-        jar="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/7.5.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="29ebc7e04d877062317c8cc0e68b20f0c1fcda66">
-        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/classes-4dbec0752424fdde860aa626f1850194967707f9.jar" />
-    </item>
-    <item
         jar="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/22.0.0/classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="a1372c17fccacca753d3951d3ad820571cbce075">
         <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/classes-85879affa98bcb1e877104a50b4319bb0390e6de.jar" />
-    </item>
-    <item
-        jar="/Users/admin/Desktop/AndroidHackathon/app/libs/volley.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="8d62b91f5ccb6f7f872313191c016c03bb61a792">
-        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/volley-e1a09cb493d8e63b18c682951574814c8d07bc83.jar" />
     </item>
     <item
         jar="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-identity/7.5.0/classes.jar"
@@ -247,13 +296,6 @@
         <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/classes-12ccfc3419f433e1e6f323ab7397177aeb432824.jar" />
     </item>
     <item
-        jar="/Users/admin/Desktop/AndroidHackathon/app/libs/jackson-databind-2.2.3.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="03ae380888029daefb91d3ecdca3a37d8cb92bc9">
-        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/jackson-databind-2.2.3-75fa39cba940c68309f12f09e16c666fab5b7193.jar" />
-    </item>
-    <item
         jar="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/classes.jar"
         jumboMode="false"
         revision="21.1.2"
@@ -261,46 +303,11 @@
         <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/classes-1078a9dae7d812dd9d9c4132aa7c63f55b130448.jar" />
     </item>
     <item
-        jar="/Users/admin/Desktop/AndroidHackathon/app/libs/jackson-annotations-2.2.3.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="0527fece4f23a457070a36c371a26d6c0208e1c3">
-        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/jackson-annotations-2.2.3-bf44f45df23214fa62b460d34a22b198b811ab5e.jar" />
-    </item>
-    <item
-        jar="/Users/admin/.gradle/caches/modules-2/files-2.1/com.google.code.findbugs/jsr305/1.3.9/40719ea6961c0cb6afaeb6a921eaa1f6afd4cfdf/jsr305-1.3.9.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="40719ea6961c0cb6afaeb6a921eaa1f6afd4cfdf">
-        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/jsr305-1.3.9-d69b38027b485032b3e6f2912d58d2fc2d3a1805.jar" />
-    </item>
-    <item
         jar="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
         <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/classes-829eb1968f6a04a607e4410b0715c42033e46066.jar" />
-    </item>
-    <item
-        jar="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.5.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="a78183f30e769a98ab4820794f597763088d3065">
-        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/classes-6f4f672860341006830f87570034c8835818b21b.jar" />
-    </item>
-    <item
-        jar="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-panorama/7.5.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="ba207be21987c11b37d9f8faa08ed6e722569f30">
-        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/classes-ab3b8f174aabd7ae1b2b23ce2236d17a73d8c28d.jar" />
-    </item>
-    <item
-        jar="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-games/7.5.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="02bac2dc792d78241077861566f2c82da955e7fa">
-        <dex dex="/Users/admin/Desktop/AndroidHackathon/app/build/intermediates/pre-dexed/debug/classes-8488f4129cc71d3c20ae8e82ab37b18bab3c46a5.jar" />
     </item>
 
 </items>

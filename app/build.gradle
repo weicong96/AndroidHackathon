@@ -10,6 +10,8 @@ android {
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
+
+        multiDexEnabled true
     }
     packagingOptions {
         exclude "META-INF/LICENSE"
@@ -23,11 +25,14 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(path: ':backendNew', configuration: 'android-endpoints')
-    compile 'com.android.support:appcompat-v7:22.2.0'
+    compile project(path: ':backend', configuration: 'android-endpoints')
+
+
+    compile 'com.android.support:multidex:1.0.0'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.google.android.gms:play-services:7.5.0'
-    compile project(path: ':backend', configuration: 'android-endpoints')
+    compile 'com.android.support:appcompat-v7:22.2.0'
+    compile 'com.ganyo:gcm-server:1.0.2'
 }

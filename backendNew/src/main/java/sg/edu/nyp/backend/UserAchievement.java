@@ -9,16 +9,13 @@ import com.googlecode.objectify.annotation.Ignore;
 import com.googlecode.objectify.annotation.Load;
 import com.googlecode.objectify.annotation.OnLoad;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by Administrator on 7/17/15.
  */
 @Entity
 public class UserAchievement {
     @Id
-    private String id;
+    private Long id;
 
     @Load
     @ApiResourceProperty(ignored = AnnotationBoolean.TRUE)
@@ -57,11 +54,11 @@ public class UserAchievement {
         this.userRef = userRef;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
