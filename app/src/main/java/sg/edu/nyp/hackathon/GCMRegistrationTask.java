@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.example.admin.myapplication.backend.registration.Registration;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
@@ -33,7 +35,7 @@ public class GCMRegistrationTask extends AsyncTask<Void, Void, String> {
                     new AndroidJsonFactory(), null)
                     // Need setRootUrl and setGoogleClientRequestInitializer only for local testing,
                     // otherwise they can be skipped
-                    //.setRootUrl("http://10.0.2.2:8080/_ah/api/")
+                    .setRootUrl("http://hackathon2015-999.appspot.com/_ah/api/")
                     .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
                         @Override
                         public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest)
@@ -46,6 +48,12 @@ public class GCMRegistrationTask extends AsyncTask<Void, Void, String> {
             regService = builder.build();
         }
         String msg = "";
+
+        if(GooglePlayServicesUtil.isGooglePlayServicesAvailable(context) != ConnectionResult.SUCCESS){
+            System.out.println("No google play services");
+        }else{
+            System.out.println("google play services");
+        }
         try {
             if (gcm == null) {
                 gcm = GoogleCloudMessaging.getInstance(context);
@@ -63,6 +71,7 @@ public class GCMRegistrationTask extends AsyncTask<Void, Void, String> {
             ex.printStackTrace();
             msg = "Error: " + ex.getMessage();
         }
+        System.out.println("Message :"+msg);
         return msg;
     }
     @Override

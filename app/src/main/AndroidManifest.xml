@@ -53,6 +53,19 @@
             android:name=".RewardsListActivity"
             android:label="@string/title_activity_rewards_list" >
         </activity>
+
+        <receiver
+            android:name=".GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.getset.getset.c2dm.intent.RECEIVE" />
+                <action android:name="com.getset.getset.c2dm.intent.REGISTRATION" />
+                <category android:name="sg.edu.nyp.hackathon" />
+            </intent-filter>
+        </receiver>
+        <service android:name=".GcmIntentService" />
+
+
     </application>
 
 </manifest>

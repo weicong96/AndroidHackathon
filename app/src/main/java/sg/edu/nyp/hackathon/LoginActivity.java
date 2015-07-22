@@ -1,15 +1,12 @@
 package sg.edu.nyp.hackathon;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import sg.edu.nyp.hackathon.R;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
@@ -25,8 +22,8 @@ import com.razer.android.nabuopensdk.models.UserProfile;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
-import sg.edu.nyp.backend.userApi.model.User;
 import sg.edu.nyp.backend.userApi.UserApi;
+import sg.edu.nyp.backend.userApi.model.User;
 
 
 public class LoginActivity extends ActionBarActivity {
@@ -43,7 +40,7 @@ public class LoginActivity extends ActionBarActivity {
         loginUtils.loginFromDevice();
 
         try {
-            new GCMRegistrationTask(this).execute().get();
+            new GCMRegistrationTask(this.getApplicationContext()).execute().get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
