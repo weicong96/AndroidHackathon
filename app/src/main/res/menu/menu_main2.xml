@@ -8,4 +8,6 @@
         android:orderInCategory="100" app:showAsAction="always"/>
     <item android:id="@+id/activity" android:title="Activity"
         android:orderInCategory="100" app:showAsAction="always"/>
+    <item android:id="@+id/rewards" android:title="Rewards"
+        android:orderInCategory="100" app:showAsAction="always"/>
 </menu>

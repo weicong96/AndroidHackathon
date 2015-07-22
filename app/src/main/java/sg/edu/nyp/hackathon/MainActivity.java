@@ -102,7 +102,8 @@ public class MainActivity extends ActionBarActivity {
             }
             UserCollection collection = new GetHelpees().execute(user.getRazerID()).get();
             if(collection != null)
-                tvHelpedCount.setText("Helped "+String.valueOf(collection.getItems().size())+" people this month");
+                if(collection.getItems() != null)
+                    tvHelpedCount.setText("Helped "+String.valueOf(collection.getItems().size())+" people this month");
             pgPoints.setProgress((int)(user.getPoints() / 100));
             tvProgress.setText(user.getPoints()+" / 100 points");
         } catch (InterruptedException e) {
@@ -150,6 +151,9 @@ public class MainActivity extends ActionBarActivity {
         }else if(id == R.id.activity){
            Intent intent = new Intent(this, WhatsHappeningActivity.class);
            startActivity(intent);
+        }else if(id == R.id.rewards){
+            Intent intent = new Intent(this, RewardsListActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

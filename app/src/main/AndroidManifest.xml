@@ -49,6 +49,10 @@
             android:name=".EventsUpcomingActivity"
             android:label="@string/title_activity_events_upcoming" >
         </activity>
+        <activity
+            android:name=".RewardsListActivity"
+            android:label="@string/title_activity_rewards_list" >
+        </activity>
     </application>
 
 </manifest>

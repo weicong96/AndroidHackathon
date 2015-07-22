@@ -11,4 +11,5 @@
     <string name="title_activity_whats_happening">WhatsHappeningActivity</string>
     <string name="title_activity_needy">NeedyActivity</string>
     <string name="title_activity_events_upcoming">EventsUpcomingActivity</string>
+    <string name="title_activity_rewards_list">RewardsListActivity</string>
 </resources>

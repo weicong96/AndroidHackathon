@@ -124,10 +124,16 @@ public class User {
     @OnLoad
     void populateRefIgnore(){
         //Trigger to load the entity
-        this.setHelpedRef(this.helpedRef);
-        for(Ref<UserReward> rewardRef : rewardsRef ){
-
-        }
+        this.helpeed = new ArrayList<User>();
+        this.rewards = new ArrayList<UserReward>();
+        if(helpedRef != null)
+            for(Ref<User> helpRef : helpedRef){
+                this.helpeed.add(helpRef.get());
+            }
+        if(rewardsRef != null)
+            for(Ref<UserReward> rewardRef : rewardsRef ){
+                rewards.add(rewardRef.get());
+            }
     }
     public String getName() {
         return name;

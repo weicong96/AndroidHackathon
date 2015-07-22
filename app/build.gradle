@@ -27,7 +27,6 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(path: ':backendNew', configuration: 'android-endpoints')
-    compile project(path: ':backend', configuration: 'android-endpoints')
 
 
     compile 'com.android.support:multidex:1.0.0'

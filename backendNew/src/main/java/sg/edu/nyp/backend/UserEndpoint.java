@@ -71,6 +71,7 @@ public class UserEndpoint {
         if (user == null) {
             throw new NotFoundException("Could not find User with ID: " + razerID);
         }
+
         return user;
     }
 
@@ -187,6 +188,20 @@ public class UserEndpoint {
         }
     }
     @ApiMethod(
+            name="getRewardsForUser",
+            path="getRewards/{razerID}",
+            httpMethod = ApiMethod.HttpMethod.GET
+    )
+    public List<UserReward> getRewardsForUser(@Named("razerID") String razerID){
+        try {
+            User user = this.get(razerID);
+            return user.getRewards();
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    @ApiMethod(
             name = "addPoint",
             path = "addPoints/{razerID}",
             httpMethod= ApiMethod.HttpMethod.GET
@@ -208,7 +223,7 @@ public class UserEndpoint {
                 helped.add(Ref.create(targetUser));
                 user.setHelpedRef(helped);
 
-                giveReward(user, razerID, );
+                giveReward(user, razerID);
                 int addPoints = 0;
                 //Add achievement
                 Achievements newAchievement = null;
@@ -258,10 +273,12 @@ public class UserEndpoint {
         }
         return null;
     }
-    private User giveReward(User user, String razerID, Long rewardID){
+    private User giveReward(User user, String razerID){
         //Create UserReward
         UserReward userReward = new UserReward();
         try {
+            long rewardID = 1;
+
             //Can put all reward logic here
             userReward.setUserRef(Ref.create(this.get(razerID)));
 
@@ -275,6 +292,8 @@ public class UserEndpoint {
 
             //Append to userreward
             List<Ref<UserReward>> rewards = user.getRewardsRef();
+            if(rewards == null)
+                rewards = new ArrayList<Ref<UserReward>>();
             rewards.add(Ref.create(key));
             user.setRewardsRef(rewards);
 
