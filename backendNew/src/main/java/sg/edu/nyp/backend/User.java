@@ -29,6 +29,16 @@ public class User {
     private double lat;
     private double lng;
 
+    public String getRegID() {
+        return regID;
+    }
+
+    public void setRegID(String regID) {
+        this.regID = regID;
+    }
+
+    private String regID;
+
 
     public double getLat() {
         return lat;

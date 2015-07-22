@@ -1,4 +1,4 @@
-package sg.edu.nyp.hackathon;
+package sg.edu.nyp.hackathon.activity;
 
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
@@ -23,6 +23,8 @@ import java.util.concurrent.ExecutionException;
 
 import sg.edu.nyp.backend.userApi.UserApi;
 import sg.edu.nyp.backend.userApi.model.UserReward;
+import sg.edu.nyp.hackathon.LoginUtils;
+import sg.edu.nyp.hackathon.R;
 
 
 public class RewardsListActivity extends ActionBarActivity {

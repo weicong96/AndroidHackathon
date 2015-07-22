@@ -1,4 +1,4 @@
-package sg.edu.nyp.hackathon;
+package sg.edu.nyp.hackathon.activity;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -20,30 +20,25 @@ import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
 import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 import com.google.api.client.util.ArrayMap;
-import com.razer.android.nabuopensdk.NabuOpenSDK;
-import com.razer.android.nabuopensdk.interfaces.Hi5Listener;
-import com.razer.android.nabuopensdk.interfaces.PulseListener;
-import com.razer.android.nabuopensdk.models.Hi5Data;
-import com.razer.android.nabuopensdk.models.PulseData;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
 
 import sg.edu.nyp.backend.userAchievementApi.model.Achievements;
 import sg.edu.nyp.backend.userAchievementApi.model.JsonMap;
-import sg.edu.nyp.backend.userAchievementApi.model.UserAchievement;
 import sg.edu.nyp.backend.userApi.UserApi;
 import sg.edu.nyp.backend.userApi.model.User;
 import sg.edu.nyp.backend.userAchievementApi.UserAchievementApi;
 import sg.edu.nyp.backend.userApi.model.UserCollection;
+import sg.edu.nyp.hackathon.AchievementsAdapter;
+import sg.edu.nyp.hackathon.CustomGridView;
+import sg.edu.nyp.hackathon.LoginUtils;
+import sg.edu.nyp.hackathon.PollingService;
+import sg.edu.nyp.hackathon.R;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -121,11 +116,11 @@ public class MainActivity extends ActionBarActivity {
         pgPoints = (ProgressBar) findViewById(R.id.pbPoints);
         tvProgress = (TextView) findViewById(R.id.tvProgress);
         refreshUI();
-
+/*
         Intent intent = new Intent(this, PollingService.class);
         intent.putExtra("userID", user.getRazerID());
         startService(intent);
-
+*/
     }
 
 

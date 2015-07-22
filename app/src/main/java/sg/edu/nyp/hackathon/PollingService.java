@@ -3,6 +3,8 @@ package sg.edu.nyp.hackathon;
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
@@ -29,6 +31,14 @@ public class PollingService extends IntentService {
     public PollingService(){
         super("HelloPollingService");
     }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.i("LocalService", "Received start id " + startId + ": " + intent);
+
+        return START_STICKY;
+    }
+
     @Override
     protected void onHandleIntent(Intent intent) {
         setupAPIs();
@@ -40,10 +50,12 @@ public class PollingService extends IntentService {
         Calendar c = Calendar.getInstance();
         c.add(Calendar.DAY_OF_MONTH, -1);
 
+        Toast.makeText(getApplicationContext(), "Handle service!", Toast.LENGTH_LONG).show();
         nabuOpenSDK.getHi5Data(PollingService.this, c.getTimeInMillis(), System.currentTimeMillis(), new Hi5Listener() {
             @Override
             public void onReceiveData(Hi5Data[] hi5Datas) {
-                System.out.println("Polling for data");
+
+                Toast.makeText(getApplicationContext(), "Handle handshake!", Toast.LENGTH_LONG).show();
                 for(Hi5Data hi5 : hi5Datas){
                     try {
                         new GivePoints().execute(userID, hi5.userID).get();
@@ -76,7 +88,26 @@ public class PollingService extends IntentService {
             api = endpoint.build();
         }
     }
+    private class UpdateLocation extends  AsyncTask<String, Void, Void>{
 
+        private double lat;
+        private double lng;
+
+        public UpdateLocation(double lat, double lng){
+            super();
+            this.lat = lat;
+            this.lng = lng;
+        }
+        @Override
+        protected Void doInBackground(String... razerIDs) {
+            try {
+                api.updateLocation(razerIDs[0], lat, lng).execute();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
     private class GivePoints extends AsyncTask<String,Void, User> {
         @Override
         protected User doInBackground(String... user) {

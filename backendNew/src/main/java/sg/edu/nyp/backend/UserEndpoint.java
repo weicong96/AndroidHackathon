@@ -7,6 +7,7 @@ import com.google.api.server.spi.response.CollectionResponse;
 import com.google.api.server.spi.response.NotFoundException;
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.api.datastore.QueryResultIterator;
+import com.google.appengine.repackaged.com.google.gson.JsonObject;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Ref;
@@ -14,6 +15,8 @@ import com.googlecode.objectify.cmd.Query;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -160,16 +163,68 @@ public class UserEndpoint {
         return null;
     }
     @ApiMethod(
+            name="registerNotification",
+            path="regNotification",
+            httpMethod= ApiMethod.HttpMethod.POST
+    )
+    public User registerNotification(JsonObject object){
+        String razerID = object.get("razerID").getAsString();
+        String regId = object.get("regID").getAsString();
+
+        //Update user here with regID
+        try {
+            User user = this.get(razerID);
+            user.setRegID(regId);
+            Key<User> userKey = ofy().save().entity(user).now();
+            return Ref.create(userKey).get();
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    @ApiMethod(
             name = "requestHelp",
             path = "requestHelp/{razerID}",
             httpMethod= ApiMethod.HttpMethod.GET
     )
-    public void requestHelp(@Named("razerID") String razerID, @Named("lat") double lat, @Named("lng")double lng){
+    public void requestHelp(@Named("razerID") String razerID, @Named("lat") final double lat, @Named("lng") final double lng){
         List<User> users = ofy().load().type(User.class).list();
-        //Go to database, find something that is
+        //Go to database, find user that is near given lat lng and notify user.
+        Collections.sort(users, new Comparator<User>() {
+            @Override
+            public int compare(User o1, User o2) {
+                double distanceDiffo1 = distance(o1.getLat(), o1.getLng(), lat, lng);
+                double distanceDiffo2 = distance(o2.getLat(), o2.getLng(), lat, lng);
+
+                return Double.compare(distanceDiffo1, distanceDiffo2);
+            }
+        });
+
         for(User user : users){
-            
+            //Send person notification about
+
         }
+    }
+    //returns distance in meters
+    public static double distance(double lat1, double lng1,
+                                  double lat2, double lng2){
+        double a = (lat1-lat2)*distPerLat(lat1);
+        double b = (lng1-lng2)*distPerLng(lat1);
+        return Math.sqrt(a*a+b*b);
+    }
+
+    private static double distPerLng(double lat){
+        return 0.0003121092*Math.pow(lat, 4)
+                +0.0101182384*Math.pow(lat, 3)
+                -17.2385140059*lat*lat
+                +5.5485277537*lat+111301.967182595;
+    }
+
+    private static double distPerLat(double lat){
+        return -0.000000487305676*Math.pow(lat, 4)
+                -0.0033668574*Math.pow(lat, 3)
+                +0.4601181791*lat*lat
+                -1.4558127346*lat+110579.25662316;
     }
     @ApiMethod(
             name = "updateLocation",

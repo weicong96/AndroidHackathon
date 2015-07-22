@@ -1,4 +1,4 @@
-package sg.edu.nyp.hackathon;
+package sg.edu.nyp.hackathon.activity;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -22,8 +22,13 @@ import com.razer.android.nabuopensdk.models.UserProfile;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
+import me.pushy.sdk.Pushy;
 import sg.edu.nyp.backend.userApi.UserApi;
 import sg.edu.nyp.backend.userApi.model.User;
+import sg.edu.nyp.hackathon.LoginUtils;
+import sg.edu.nyp.hackathon.R;
+import sg.edu.nyp.hackathon.RegisterForPushy;
+import sg.edu.nyp.hackathon.activity.MainActivity;
 
 
 public class LoginActivity extends ActionBarActivity {
@@ -39,15 +44,10 @@ public class LoginActivity extends ActionBarActivity {
         loginUtils = LoginUtils.getInstance(this);
         loginUtils.loginFromDevice();
 
-        try {
-            new GCMRegistrationTask(this.getApplicationContext()).execute().get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+        Pushy.listen(this);
 
         if(loginUtils.isLoggedIn()){
+
             //If logged in , continue with rest of app
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
@@ -117,6 +117,7 @@ public class LoginActivity extends ActionBarActivity {
                             User newUser = new RegisterUser().execute(user).get();
                             loginUtils.login(newUser.getRazerID());
 
+                            new RegisterForPushy(getApplicationContext(), newUser.getRazerID()).execute().get();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                             finish();

@@ -1,9 +1,11 @@
-package sg.edu.nyp.hackathon;
+package sg.edu.nyp.hackathon.activity;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import sg.edu.nyp.hackathon.R;
 
 
 public class EventsUpcomingActivity extends ActionBarActivity {
