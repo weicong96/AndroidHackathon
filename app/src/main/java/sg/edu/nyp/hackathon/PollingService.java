@@ -33,7 +33,7 @@ public class PollingService extends IntentService {
     static NabuOpenSDK nabuOpenSDK = null;
     String nabuAPPID;
     String userID;
-
+    private long time = 0;
     public PollingService() {
         super("PollingService");
     }
@@ -64,8 +64,10 @@ public class PollingService extends IntentService {
 
         Toast.makeText(getApplicationContext(),"Service running", Toast.LENGTH_SHORT).show();
         LoginUtils.getInstance(getApplicationContext()).loginFromDevice();
+
         if(LoginUtils.getInstance(getApplicationContext()).isLoggedIn()){
             //If not logged, setup something here?
+
             userID = LoginUtils.getInstance(getApplicationContext()).getUser().getRazerID();
         }
 
@@ -120,12 +122,18 @@ public class PollingService extends IntentService {
                 @Override
                 public void onReceiveData(Hi5Data[] hi5Datas) {
                     for (Hi5Data hi5 : hi5Datas) {
+                        //Cannot handshake twice in a minute
+                        //TODO : remove when in demo!!!!!
+                        if(Math.abs(time - System.currentTimeMillis()) > (60 * 1000)){
+
                         try {
                             new GivePoints().execute(userID, hi5.userID).get();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         } catch (ExecutionException e) {
                             e.printStackTrace();
+                        }
+                            time = System.currentTimeMillis();
                         }
                     }
                 }
