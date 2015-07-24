@@ -6,6 +6,7 @@ import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Ignore;
+import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Load;
 import com.googlecode.objectify.annotation.OnLoad;
 
@@ -21,6 +22,7 @@ public class User {
     private String razerID;
     private String name;
     private String email;
+    @Index
     private boolean needy;
     private String level;
     private long points;

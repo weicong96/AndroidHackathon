@@ -4,11 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
-import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
-
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
@@ -99,16 +94,7 @@ public class LoginUtils {
     }
     private UserApi api = null;
     public void setupAPIS(){
-        if(api == null) {
-            UserApi.Builder endpoint = new UserApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null);
-            endpoint.setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
-                @Override
-                public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
-                    abstractGoogleClientRequest.setDisableGZipContent(true);
-                }
-            });
-            api = endpoint.build();
-        }
+        api = ApisProvider.getUserApi();
     }
     public boolean isLoggedIn(){
         return preferences.getBoolean("loggedin", false);

@@ -1,8 +1,8 @@
 package sg.edu.nyp.hackathon.activity;
 
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,17 +12,14 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
-import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
-
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import sg.edu.nyp.backend.userApi.UserApi;
 import sg.edu.nyp.backend.userApi.model.UserReward;
+import sg.edu.nyp.hackathon.ApisProvider;
 import sg.edu.nyp.hackathon.LoginUtils;
 import sg.edu.nyp.hackathon.R;
 
@@ -39,6 +36,8 @@ public class RewardsListActivity extends ActionBarActivity {
         lvRewards = (ListView) findViewById(R.id.lvRewards);
         try {
             rewardItems = new getRewardsList().execute(LoginUtils.getInstance(this).getUser().getRazerID()).get();
+            if(rewardItems == null)
+                rewardItems = new ArrayList<UserReward>();
             lvRewards.setAdapter(new BaseAdapter() {
                 @Override
                 public int getCount() {
@@ -97,17 +96,7 @@ public class RewardsListActivity extends ActionBarActivity {
     }
     private UserApi userApi = null;
     public void setupAPIS(){
-        if(userApi == null) {
-            UserApi.Builder endpoint = new UserApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null);
-            //endpoint.setRootUrl("http://192.168.1.4:8080/_ah/api");
-            endpoint.setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
-                @Override
-                public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
-                    abstractGoogleClientRequest.setDisableGZipContent(true);
-                }
-            });
-            userApi = endpoint.build();
-        }
+        userApi = ApisProvider.getUserApi();
     }
     public class getRewardsList extends AsyncTask<String, Void, List<UserReward>>{
 

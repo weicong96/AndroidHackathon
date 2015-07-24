@@ -1,15 +1,20 @@
 package sg.edu.nyp.hackathon;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Binder;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
-import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 import com.razer.android.nabuopensdk.NabuOpenSDK;
 import com.razer.android.nabuopensdk.interfaces.Hi5Listener;
 import com.razer.android.nabuopensdk.models.Hi5Data;
@@ -28,21 +33,41 @@ public class PollingService extends IntentService {
     static NabuOpenSDK nabuOpenSDK = null;
     String nabuAPPID;
     String userID;
-    public PollingService(){
-        super("HelloPollingService");
+
+    public PollingService() {
+        super("PollingService");
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        super.onStartCommand(intent, flags, startId);
         Log.i("LocalService", "Received start id " + startId + ": " + intent);
 
         return START_STICKY;
     }
 
+    public boolean isOnline(){
+        Context context = getBaseContext();
+        ConnectivityManager cm = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        }
+        return false;
+
+    }
+    boolean running = true;
     @Override
-    protected void onHandleIntent(Intent intent) {
+    public void onHandleIntent(Intent intent) {
         setupAPIs();
-        userID = intent.getExtras().getString("userID");
+
+        Toast.makeText(getApplicationContext(),"Service running", Toast.LENGTH_SHORT).show();
+        LoginUtils.getInstance(getApplicationContext()).loginFromDevice();
+        if(LoginUtils.getInstance(getApplicationContext()).isLoggedIn()){
+            //If not logged, setup something here?
+            userID = LoginUtils.getInstance(getApplicationContext()).getUser().getRazerID();
+        }
 
         System.out.println("Intent Running!");
         nabuOpenSDK = nabuOpenSDK.getInstance(this);
@@ -50,43 +75,81 @@ public class PollingService extends IntentService {
         Calendar c = Calendar.getInstance();
         c.add(Calendar.DAY_OF_MONTH, -1);
 
-        Toast.makeText(getApplicationContext(), "Handle service!", Toast.LENGTH_LONG).show();
-        nabuOpenSDK.getHi5Data(PollingService.this, c.getTimeInMillis(), System.currentTimeMillis(), new Hi5Listener() {
-            @Override
-            public void onReceiveData(Hi5Data[] hi5Datas) {
+        LocationManager mLocationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 
-                Toast.makeText(getApplicationContext(), "Handle handshake!", Toast.LENGTH_LONG).show();
-                for(Hi5Data hi5 : hi5Datas){
-                    try {
-                        new GivePoints().execute(userID, hi5.userID).get();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    }
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+        criteria.setAltitudeRequired(false);
+        criteria.setBearingRequired(false);
+        criteria.setCostAllowed(true);
+
+        String provider = mLocationManager.getBestProvider(criteria, true);
+        mLocationManager.requestLocationUpdates(provider, 30 * 1000, 100, new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                try {
+                    Toast.makeText(getApplicationContext(),"Location change", Toast.LENGTH_SHORT).show();
+                    new UpdateLocation(location.getLatitude(), location.getLongitude()).execute(userID).get();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
                 }
             }
 
             @Override
-            public void onReceiveFailed(String s) {
-                System.out.println(s);
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
             }
         });
+        while(running){
+
+            if(isOnline()){
+
+            nabuOpenSDK.getHi5Data(PollingService.this, c.getTimeInMillis(), System.currentTimeMillis(), new Hi5Listener() {
+                @Override
+                public void onReceiveData(Hi5Data[] hi5Datas) {
+                    for (Hi5Data hi5 : hi5Datas) {
+                        try {
+                            new GivePoints().execute(userID, hi5.userID).get();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                @Override
+                public void onReceiveFailed(String s) {
+                    System.out.println(s);
+                }
+            });
+            try {
+                Thread.sleep(30 * 1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+
+            }
+        }
     }
+
 
     private UserApi api = null;
     public void setupAPIs(){
-        if(api == null) {
-            UserApi.Builder endpoint = new UserApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null);
-            //endpoint.setRootUrl("http://192.168.1.4:8080/_ah/api");
-            endpoint.setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
-                @Override
-                public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
-                    abstractGoogleClientRequest.setDisableGZipContent(true);
-                }
-            });
-            api = endpoint.build();
-        }
+        api = ApisProvider.getUserApi();
     }
     private class UpdateLocation extends  AsyncTask<String, Void, Void>{
 
@@ -121,5 +184,8 @@ public class PollingService extends IntentService {
             return null;
             //return null;
         }
+    }
+    private class MyBinder extends Binder {
+
     }
 }

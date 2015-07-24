@@ -7,12 +7,23 @@ import com.google.api.server.spi.response.CollectionResponse;
 import com.google.api.server.spi.response.NotFoundException;
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.api.datastore.QueryResultIterator;
+import com.google.appengine.repackaged.com.google.gson.Gson;
+import com.google.appengine.repackaged.com.google.gson.JsonArray;
 import com.google.appengine.repackaged.com.google.gson.JsonObject;
+import com.google.appengine.repackaged.com.google.gson.JsonPrimitive;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.cmd.Query;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -167,13 +178,13 @@ public class UserEndpoint {
             path="regNotification",
             httpMethod= ApiMethod.HttpMethod.POST
     )
-    public User registerNotification(JsonObject object){
-        String razerID = object.get("razerID").getAsString();
-        String regId = object.get("regID").getAsString();
+    public User registerNotification(User user){
+        String razerID = user.getRazerID();
+        String regId = user.getRegID();
 
         //Update user here with regID
         try {
-            User user = this.get(razerID);
+            user = this.get(razerID);
             user.setRegID(regId);
             Key<User> userKey = ofy().save().entity(user).now();
             return Ref.create(userKey).get();
@@ -187,8 +198,9 @@ public class UserEndpoint {
             path = "requestHelp/{razerID}",
             httpMethod= ApiMethod.HttpMethod.GET
     )
+    //Got to make it such that this also updates the needy's location.
     public void requestHelp(@Named("razerID") String razerID, @Named("lat") final double lat, @Named("lng") final double lng){
-        List<User> users = ofy().load().type(User.class).list();
+        List<User> users = ofy().load().type(User.class).filter("needy", false).list();
         //Go to database, find user that is near given lat lng and notify user.
         Collections.sort(users, new Comparator<User>() {
             @Override
@@ -199,11 +211,57 @@ public class UserEndpoint {
                 return Double.compare(distanceDiffo1, distanceDiffo2);
             }
         });
+        URL url = null;
+        try {
+            url = new URL("https://pushy.me/push?api_key=677903558b207ae13205462e1c7b20609bb6f87e6c5869f38945e6ac6ed8566b");
+            JsonObject object = new JsonObject();
+            JsonArray array = new JsonArray();
+            array.add(new JsonPrimitive(users.get(0).getRegID()));
+            JsonObject dataObject = new JsonObject();
 
-        for(User user : users){
-            //Send person notification about
+            //Need to send information about user here?
+            dataObject.addProperty("TYPE" , "NEARBY");
+            dataObject.addProperty("MESSAGE","Somebody nearby needs help! Help now for your chance to earn points!");
+            dataObject.addProperty("TITLE","Help Request");
+            dataObject.addProperty("LAT", String.valueOf(lat));
+            dataObject.addProperty("LNG", String.valueOf(lng));
 
+            object.add("registration_ids", array);
+            object.add("data", dataObject);
+            String content = new Gson().toJson(object);
+
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setDoOutput(true);
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setRequestProperty("Content-Length", String.valueOf(content.length()));
+
+            logger.info(String.valueOf(lat));
+            OutputStream stream = con.getOutputStream();
+            stream.write(content.getBytes());
+            stream.flush();
+
+            String allLines = "";
+            String line;
+            InputStream response = con.getInputStream();
+
+            BufferedReader reader = new BufferedReader(new
+                    InputStreamReader(con.getInputStream()));
+            while ((line = reader.readLine()) != null) {
+                allLines += line+"/n";
+            }
+            stream.close();
+            reader.close();
+
+        } catch (MalformedURLException e) {
+
+            logger.severe(e.getMessage());
+        } catch (IOException e) {
+
+            logger.severe(e.getMessage()+" "+e.getCause());
+            e.printStackTrace();
         }
+
     }
     //returns distance in meters
     public static double distance(double lat1, double lng1,
@@ -282,7 +340,6 @@ public class UserEndpoint {
                 int addPoints = 0;
                 //Add achievement
                 Achievements newAchievement = null;
-
                 if (helped.size() >= 5) {
                     //Check if got achievements already
                     newAchievement = AchievementsENUM.getAchivements(AchievementsENUM.UNIQUE_THREE);
@@ -320,6 +377,8 @@ public class UserEndpoint {
                     user.setAchievements(list);
                 }
                 ofy().save().entity(user).now();
+            }else{
+                //logger.severe("Handshake with both non needy");
             }
             return ofy().load().entity(user).now();
 
@@ -332,13 +391,27 @@ public class UserEndpoint {
         //Create UserReward
         UserReward userReward = new UserReward();
         try {
-            long rewardID = 1;
+            long rewardID = 0;
+            long pointsRequired = 0;
 
+            if(user.getPoints() >= 10){
+                rewardID = 1;
+                pointsRequired = 10;
+            }
+            if(user.getPoints() >= 11){
+                rewardID = 2;
+                pointsRequired = 20;
+            }
+            if(user.getPoints() >= 12){
+                rewardID = 3;
+                pointsRequired = 30;
+            }
             //Can put all reward logic here
             userReward.setUserRef(Ref.create(this.get(razerID)));
-
             Reward rewardEntity = new Reward();
             rewardEntity.setId(rewardID);
+            rewardEntity.setPointsRequired(pointsRequired);
+            ofy().save().entity(rewardEntity).now();
             rewardEntity = ofy().load().entity(rewardEntity).now();
             userReward.setRewardRef(Ref.create(rewardEntity));
 

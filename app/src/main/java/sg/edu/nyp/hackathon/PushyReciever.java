@@ -1,26 +1,27 @@
 package sg.edu.nyp.hackathon;
 
-        import android.app.Notification;
-        import android.app.NotificationManager;
-        import android.content.BroadcastReceiver;
-        import android.content.Context;
-        import android.content.Intent;
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
+
+import sg.edu.nyp.hackathon.activity.HelperNeedyViewActivity;
 
 public class PushyReciever extends BroadcastReceiver
 {
     @Override
     public void onReceive(Context context, Intent intent)
     {
-        //-----------------------------
-        // Create a test notification
-        //
-        // (Use deprecated notification
-        // API for demonstration purposes,
-        // to avoid having to import
-        // the Android Support Library)
-        //-----------------------------
+        if(intent.getStringExtra("TYPE").equals("NEARBY")){
 
-        String notificationTitle = "Pushy";
+
+        String notificationTitle = intent.getStringExtra("TITLE");
         String notificationDesc = "Test notification";
 
         //-----------------------------
@@ -33,46 +34,39 @@ public class PushyReciever extends BroadcastReceiver
         // {"message":"Hello World!"}
         //-----------------------------
 
-        if ( intent.getStringExtra("message") != null )
+        if ( intent.getStringExtra("MESSAGE") != null )
         {
-            notificationDesc = intent.getStringExtra("message");
+            notificationDesc = intent.getStringExtra("MESSAGE");
         }
 
-        //-----------------------------
-        // Create a test notification
-        //-----------------------------
+            notifyUser(context, notificationTitle,notificationDesc,intent);
+        }
 
-        Notification notification = new Notification(android.R.drawable.ic_dialog_info, notificationDesc, System.currentTimeMillis());
+    }
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    public static void notifyUser(Context activity, String header,
+                                  String message,Intent intent) {
+        NotificationManager notificationManager = (NotificationManager) activity
+                .getSystemService(Activity.NOTIFICATION_SERVICE);
+        Intent notificationIntent = new Intent(
+                activity.getApplicationContext(), HelperNeedyViewActivity.class);
+        notificationIntent.putExtra("LAT",intent.getStringExtra("LAT"));
+        notificationIntent.putExtra("LNG",intent.getStringExtra("LNG"));
 
-        //-----------------------------
-        // Sound + vibrate + light
-        //-----------------------------
-
-        notification.defaults = Notification.DEFAULT_ALL;
-
-        //-----------------------------
-        // Dismisses when pressed
-        //-----------------------------
-
-        notification.flags = Notification.FLAG_AUTO_CANCEL;
-
-        //-----------------------------
-        // Create pending intent
-        // without a real intent
-        //-----------------------------
-
-        notification.setLatestEventInfo(context, notificationTitle, notificationDesc, null);
-
-        //-----------------------------
-        // Get notification manager
-        //-----------------------------
-
-        NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-        //-----------------------------
-        // Show the notification
-        //-----------------------------
-
-        mNotificationManager.notify(0, notification);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(activity);
+        stackBuilder.addParentStack(HelperNeedyViewActivity.class);
+        stackBuilder.addNextIntent(notificationIntent);
+        PendingIntent pIntent = stackBuilder.getPendingIntent(0,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        Notification notification = new Notification.Builder(activity)
+                .setContentTitle(header)
+                .setContentText(message)
+                .setContentIntent(pIntent)
+                .setDefaults(
+                        Notification.DEFAULT_SOUND
+                                | Notification.DEFAULT_VIBRATE)
+                .setContentIntent(pIntent).setAutoCancel(true)
+                .setSmallIcon(android.R.drawable.ic_dialog_info).build();
+        notificationManager.notify(2, notification);
     }
 }

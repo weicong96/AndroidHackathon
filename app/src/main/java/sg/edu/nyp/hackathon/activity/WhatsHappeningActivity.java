@@ -1,8 +1,8 @@
 package sg.edu.nyp.hackathon.activity;
 
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,18 +13,14 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
-import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
-
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import sg.edu.nyp.backend.userAchievementApi.UserAchievementApi;
 import sg.edu.nyp.backend.userAchievementApi.model.UserAchievement;
-import sg.edu.nyp.backend.userApi.UserApi;
+import sg.edu.nyp.hackathon.ApisProvider;
 import sg.edu.nyp.hackathon.R;
 
 
@@ -40,6 +36,8 @@ public class WhatsHappeningActivity extends ActionBarActivity {
         setupAPIS();
         try {
             items = new GetLatestHappenings().execute().get();
+            if(items == null)
+                items = new ArrayList<UserAchievement>();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -99,17 +97,7 @@ public class WhatsHappeningActivity extends ActionBarActivity {
     }
     private UserAchievementApi userAchApi = null;
     public void setupAPIS(){
-        if(userAchApi == null) {
-            UserAchievementApi.Builder endpoint = new UserAchievementApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null);
-            //endpoint.setRootUrl("http://192.168.1.4:8080/_ah/api");
-            endpoint.setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
-                @Override
-                public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
-                    abstractGoogleClientRequest.setDisableGZipContent(true);
-                }
-            });
-            userAchApi = endpoint.build();
-        }
+       userAchApi = ApisProvider.getUserAchievementApi();
     }
     public class GetLatestHappenings extends AsyncTask<String, Void, List<UserAchievement>>{
 

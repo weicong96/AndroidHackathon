@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,29 +15,38 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
-import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 import com.google.api.client.util.ArrayMap;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import sg.edu.nyp.backend.userAchievementApi.UserAchievementApi;
 import sg.edu.nyp.backend.userAchievementApi.model.Achievements;
 import sg.edu.nyp.backend.userAchievementApi.model.JsonMap;
 import sg.edu.nyp.backend.userApi.UserApi;
 import sg.edu.nyp.backend.userApi.model.User;
-import sg.edu.nyp.backend.userAchievementApi.UserAchievementApi;
 import sg.edu.nyp.backend.userApi.model.UserCollection;
 import sg.edu.nyp.hackathon.AchievementsAdapter;
+import sg.edu.nyp.hackathon.ApisProvider;
 import sg.edu.nyp.hackathon.CustomGridView;
 import sg.edu.nyp.hackathon.LoginUtils;
-import sg.edu.nyp.hackathon.PollingService;
 import sg.edu.nyp.hackathon.R;
 
 
@@ -58,7 +67,11 @@ public class MainActivity extends ActionBarActivity {
         tvHelpedCount = (TextView) findViewById(R.id.tvHelpedCount);
 
         llAchievementsByMonth.removeAllViews();
+
+
         try {
+           // new TestNotification().execute().get();
+
             LoginUtils.getInstance(getBaseContext()).refreshUser();
             user = LoginUtils.getInstance(getBaseContext()).getUser();
 
@@ -180,28 +193,8 @@ public class MainActivity extends ActionBarActivity {
     private UserApi api = null;
     private UserAchievementApi userAchApi = null;
     public void setupAPIS(){
-        if(api == null) {
-            UserApi.Builder endpoint = new UserApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null);
-            //endpoint.setRootUrl("http://192.168.1.4:8080/_ah/api");
-            endpoint.setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
-                @Override
-                public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
-                    abstractGoogleClientRequest.setDisableGZipContent(true);
-                }
-            });
-            api = endpoint.build();
-        }
-        if(userAchApi == null) {
-            UserAchievementApi.Builder endpoint = new UserAchievementApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null);
-            //endpoint.setRootUrl("http://192.168.1.4:8080/_ah/api");
-            endpoint.setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
-                @Override
-                public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
-                    abstractGoogleClientRequest.setDisableGZipContent(true);
-                }
-            });
-            userAchApi = endpoint.build();
-        }
+        api = ApisProvider.getUserApi();
+        userAchApi = ApisProvider.getUserAchievementApi();
     }
     private class GetAchievements extends AsyncTask<User, Void, List<Map<String, Object>>>{
 
@@ -236,6 +229,57 @@ public class MainActivity extends ActionBarActivity {
             }
             return null;
             //return null;
+        }
+    }
+
+    private class TestNotification extends  AsyncTask<Void, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            URL url = null;
+            try {
+                url = new URL("https://pushy.me/push?api_key=677903558b207ae13205462e1c7b20609bb6f87e6c5869f38945e6ac6ed8566b");
+                JsonObject object = new JsonObject();
+                JsonArray array = new JsonArray();
+                array.add(new JsonPrimitive("91f8fcf4492af30bb03a9d"));
+                JsonObject dataObject = new JsonObject();
+
+                dataObject.addProperty("message" , "Hello World 2");
+
+                object.add("registration_ids", array);
+                object.add("data", dataObject);
+                String content = URLEncoder.encode(object.toString(), "UTF-8");
+
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                //con.setDoOutput(true);
+                con.setRequestMethod("POST");
+                con.setRequestProperty("Content-Type", "application/json");
+                con.setRequestProperty("Content-Length", String.valueOf(content.length()));
+                OutputStream stream = con.getOutputStream();
+                stream.write(content.getBytes());
+                stream.flush();
+
+                String allLines = "";
+                String line;
+                InputStream response = con.getInputStream();
+
+                BufferedReader reader = new BufferedReader(new
+                        InputStreamReader(con.getInputStream()));
+                while ((line = reader.readLine()) != null) {
+                    allLines += line+"/n";
+
+                    Logger.getAnonymousLogger().log(Level.SEVERE, line);
+                }
+                stream.close();
+                reader.close();
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
         }
     }
 }

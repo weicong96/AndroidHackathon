@@ -13,6 +13,15 @@ public class Reward {
     private Long id;
     private String name;
     private String image;
+    private long pointsRequired;
+
+    public long getPointsRequired() {
+        return pointsRequired;
+    }
+
+    public void setPointsRequired(long pointsRequired) {
+        this.pointsRequired = pointsRequired;
+    }
 
     public long getId() {
         return id;
