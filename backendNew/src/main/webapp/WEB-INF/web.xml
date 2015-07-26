@@ -14,8 +14,9 @@
         <init-param>
             <param-name>services</param-name>
             <param-value>sg.edu.nyp.backend.AchievementsEndpoint, sg.edu.nyp.backend.UserEndpoint,
-                sg.edu.nyp.backend.UserAchievementEndpoint, sg.edu.nyp.backend.RewardEndpoint
-		</param-value>
+                sg.edu.nyp.backend.UserAchievementEndpoint, sg.edu.nyp.backend.RewardEndpoint,
+                sg.edu.nyp.backend.UserEventEndpoint, sg.edu.nyp.backend.VolunteerLocationsEndpoint,
+                sg.edu.nyp.backend.EventEndpoint, sg.edu.nyp.backend.HelpRequestEndpoint</param-value>
 	</init-param>
     </servlet>
     <servlet-mapping>

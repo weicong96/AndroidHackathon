@@ -114,7 +114,6 @@ public class UserAchievementEndpoint {
                         map.add(mapMonths);
                     mapMonths = new HashMap<String, Object>();
 
-
                     mapMonths.put("month", format.format(cal.getTime()));
                     mapMonths.put("items", new UserAchievement[]{ach});
                 }

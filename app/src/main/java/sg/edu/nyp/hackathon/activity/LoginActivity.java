@@ -26,6 +26,7 @@ import sg.edu.nyp.backend.userApi.UserApi;
 import sg.edu.nyp.backend.userApi.model.User;
 import sg.edu.nyp.hackathon.ApisProvider;
 import sg.edu.nyp.hackathon.LoginUtils;
+import sg.edu.nyp.hackathon.MainDrawerActivity;
 import sg.edu.nyp.hackathon.PollingService;
 import sg.edu.nyp.hackathon.R;
 
@@ -52,24 +53,24 @@ public class LoginActivity extends ActionBarActivity {
         setupAPIS();
         loginUtils = LoginUtils.getInstance(this);
         loginUtils.loginFromDevice();
-
         Pushy.listen(this);
 
-        if(!isMyServiceRunning(PollingService.class)){
-            getBaseContext().startService(new Intent(getBaseContext(), PollingService.class));
-        }
         if(loginUtils.isLoggedIn()){
 
-            //If logged in , continue with rest of app
-            if(loginUtils.getUser().getNeedy().booleanValue()){
-                Intent intent = new Intent(LoginActivity.this, NeedyActivity.class);
-                startActivity(intent);
-                finish();
-            }else {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+
+            if(!isMyServiceRunning(PollingService.class)){
+                getBaseContext().startService(new Intent(getBaseContext(), PollingService.class));
             }
+
+            Intent intent = new Intent(LoginActivity.this, MainDrawerActivity.class);
+            if(loginUtils.getUser().getNeedy().booleanValue()){
+                intent.putExtra("NEEDY", true);
+            }else {
+                intent.putExtra("NEEDY",false);
+            }
+            startActivity(intent);
+            finish();
+
             return;
         }
 
@@ -90,15 +91,20 @@ public class LoginActivity extends ActionBarActivity {
                                 register();
                             }else{
                                 loginUtils.login(s);
-                                if(loginUtils.getUser().getNeedy().booleanValue()){
-                                    Intent intent = new Intent(LoginActivity.this, NeedyActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                }else {
-                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
+
+
+                                if(!isMyServiceRunning(PollingService.class)){
+                                    getBaseContext().startService(new Intent(getBaseContext(), PollingService.class));
                                 }
+
+                                Intent intent = new Intent(LoginActivity.this, MainDrawerActivity.class);
+                                if(loginUtils.getUser().getNeedy().booleanValue()){
+                                    intent.putExtra("NEEDY", true);
+                                }else {
+                                    intent.putExtra("NEEDY",false);
+                                }
+                                startActivity(intent);
+                                finish();
                             }
                         } catch (InterruptedException e) {
                             e.printStackTrace();
@@ -136,9 +142,13 @@ public class LoginActivity extends ActionBarActivity {
                 nabuOpenSDK.getCurrentUserID(getBaseContext(), new UserIDListener() {
                     @Override
                     public void onReceiveData(String s) {
+
+                        if(s != null){
+
                         user.setRazerID(s);
                         try {
-                            if(user.getRazerID().equals("e448df6f7f85901a76d9eac14df0daeb5efef2b669a54f61967d488332f5f46a"))
+
+                            if(user.getRazerID().equals("d968055247de5c0c96d7bba758243e389f21b426ac51220bc25db91336eece93"))
                                 user.setNeedy(true);
                             User newUser = new RegisterUser().execute(user).get();
 
@@ -152,6 +162,7 @@ public class LoginActivity extends ActionBarActivity {
                             e.printStackTrace();
                         } catch (ExecutionException e) {
                             e.printStackTrace();
+                        }
                         }
                     }
 
@@ -256,9 +267,21 @@ public class LoginActivity extends ActionBarActivity {
                     System.out.println("User null");
                 }
                 LoginUtils.getInstance(context).setUser(newUser);
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+
+                if(!isMyServiceRunning(PollingService.class)){
+                    getBaseContext().startService(new Intent(getBaseContext(), PollingService.class));
+                }
+
+                Intent intent = new Intent(LoginActivity.this, MainDrawerActivity.class);
+                if(loginUtils.getUser().getNeedy().booleanValue()){
+                    intent.putExtra("NEEDY", true);
+                }else {
+                    intent.putExtra("NEEDY",false);
+                }
                 startActivity(intent);
                 finish();
+
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

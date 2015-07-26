@@ -91,7 +91,14 @@ public class RewardEndpoint {
         }
         return CollectionResponse.<Reward>builder().setItems(rewardList).setNextPageToken(queryIterator.getCursor().toWebSafeString()).build();
     }
-
+    @ApiMethod(
+            name="insert",
+            path="insertPaths",
+            httpMethod = ApiMethod.HttpMethod.POST
+    )
+    public void insert(Reward reward){
+        ofy().save().entity(reward).now();
+    }
     private void checkExists(long id) throws NotFoundException {
         try {
             ofy().load().type(Reward.class).id(id).safe();

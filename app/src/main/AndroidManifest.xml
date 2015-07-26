@@ -52,14 +52,6 @@
             android:label="@string/title_activity_whats_happening" >
         </activity>
         <activity
-            android:name=".activity.NeedyActivity"
-            android:label="@string/title_activity_needy" >
-        </activity>
-        <activity
-            android:name=".activity.EventsUpcomingActivity"
-            android:label="@string/title_activity_events_upcoming" >
-        </activity>
-        <activity
             android:name=".activity.RewardsListActivity"
             android:label="@string/title_activity_rewards_list" >
         </activity>
@@ -113,8 +105,8 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".activity.HelperNeedyViewActivity"
-            android:label="@string/title_activity_helper_needy_view" >
+            android:name=".MainDrawerActivity"
+            android:label="@string/title_activity_main_drawer" >
         </activity>
     </application>
 

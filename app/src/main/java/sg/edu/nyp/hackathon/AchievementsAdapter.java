@@ -4,11 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
-
-
-import org.w3c.dom.Text;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 
@@ -43,15 +39,25 @@ public class AchievementsAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        TextView tvText;
+        ImageView ivItems;
         if(view == null){
-            tvText = new TextView(context);
-            tvText.setLayoutParams(new ListView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvText.setTextSize(28);
+            ivItems = new ImageView(context);
+
+            ivItems.setLayoutParams(new ViewGroup.LayoutParams(200, 200));
         }else{
-            tvText = (TextView) view;
+            ivItems = (ImageView) view;
         }
-        tvText.setText(items.get(i).getAchievementID().toString());
-        return tvText;
+        if(items.get(i).getAchievementID().longValue() == 1){
+            ivItems.setImageDrawable(context.getResources().getDrawable(R.drawable.gold));
+        }
+
+        if(items.get(i).getAchievementID().longValue() == 2){
+            ivItems.setImageDrawable(context.getResources().getDrawable(R.drawable.silver));
+        }
+        if(items.get(i).getAchievementID().longValue() == 3){
+            ivItems.setImageDrawable(context.getResources().getDrawable(R.drawable.bronze));
+        }
+
+        return ivItems;
     }
 }

@@ -1,12 +1,12 @@
 package sg.edu.nyp.backend;
 
 import com.google.api.server.spi.config.AnnotationBoolean;
-import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiResourceProperty;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Ignore;
+import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Load;
 import com.googlecode.objectify.annotation.OnLoad;
 
@@ -16,9 +16,10 @@ import com.googlecode.objectify.annotation.OnLoad;
 @Entity
 public class UserEvent {
     @Id
-    private long id;
+    private Long id;
 
     @Load
+    @Index
     @ApiResourceProperty(ignored= AnnotationBoolean.TRUE)
     private Ref<User> userRef;
 
@@ -26,11 +27,31 @@ public class UserEvent {
     private User user;
 
     @Load
+    @Index
     @ApiResourceProperty(ignored= AnnotationBoolean.TRUE)
     private Ref<Event> eventRef;
 
     @Ignore
     private Event event;
+
+    @Index
+    private Boolean attending;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Boolean getAttending() {
+        return attending;
+    }
+
+    public void setAttending(Boolean attending) {
+        this.attending = attending;
+    }
 
     public Ref<User> getUserRef() {
         return userRef;

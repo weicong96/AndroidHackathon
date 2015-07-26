@@ -65,6 +65,7 @@ public class UserEndpoint {
         ObjectifyService.register(UserLocation.class);
         ObjectifyService.register(UserReward.class);
         ObjectifyService.register(Reward.class);
+        ObjectifyService.register(HelpRequest.class);
 
     }
 
@@ -102,6 +103,7 @@ public class UserEndpoint {
         // Objectify ID generator, e.g. long or String, then you should generate the unique ID yourself prior to saving.
         //
         // If your client provides the ID then you should probably use PUT instead.
+        user.setName("Wei Cong");
         ofy().save().entity(user).now();
         logger.info("Created User with ID: " + user.getRazerID());
 
@@ -216,42 +218,60 @@ public class UserEndpoint {
             url = new URL("https://pushy.me/push?api_key=677903558b207ae13205462e1c7b20609bb6f87e6c5869f38945e6ac6ed8566b");
             JsonObject object = new JsonObject();
             JsonArray array = new JsonArray();
-            array.add(new JsonPrimitive(users.get(0).getRegID()));
-            JsonObject dataObject = new JsonObject();
-
-            //Need to send information about user here?
-            dataObject.addProperty("TYPE" , "NEARBY");
-            dataObject.addProperty("MESSAGE","Somebody nearby needs help! Help now for your chance to earn points!");
-            dataObject.addProperty("TITLE","Help Request");
-            dataObject.addProperty("LAT", String.valueOf(lat));
-            dataObject.addProperty("LNG", String.valueOf(lng));
-
-            object.add("registration_ids", array);
-            object.add("data", dataObject);
-            String content = new Gson().toJson(object);
-
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setDoOutput(true);
-            con.setRequestMethod("POST");
-            con.setRequestProperty("Content-Type", "application/json");
-            con.setRequestProperty("Content-Length", String.valueOf(content.length()));
-
-            logger.info(String.valueOf(lat));
-            OutputStream stream = con.getOutputStream();
-            stream.write(content.getBytes());
-            stream.flush();
-
-            String allLines = "";
-            String line;
-            InputStream response = con.getInputStream();
-
-            BufferedReader reader = new BufferedReader(new
-                    InputStreamReader(con.getInputStream()));
-            while ((line = reader.readLine()) != null) {
-                allLines += line+"/n";
+            for(int i = 0 ; i < users.size(); i++){
+                array.add(new JsonPrimitive(users.get(i).getRegID()));
             }
-            stream.close();
-            reader.close();
+
+                HelpRequest request = new HelpRequest();
+
+                User user = this.get(razerID);
+                request.setNeedyUserRef(Ref.create(user));
+                request.setLat(user.getLat());
+                request.setLng(user.getLng());
+                //Yet to set resolved and helper ref yet, do it in update helprequest endpoint
+
+                Key<HelpRequest> key = ofy().save().entity(request).now();
+
+                JsonObject dataObject = new JsonObject();
+                //Need to send information about user here?
+                dataObject.addProperty("TYPE" , "NEARBY");
+                dataObject.addProperty("MESSAGE","Somebody nearby needs help! Help now for your chance to earn points!");
+                dataObject.addProperty("TITLE","Help Request");
+                dataObject.addProperty("LAT", String.valueOf(lat));
+                dataObject.addProperty("LNG", String.valueOf(lng));
+                dataObject.addProperty("REQUESTID", String.valueOf(Ref.create(key).get().getRequestID()));
+
+                object.add("registration_ids", array);
+                object.add("data", dataObject);
+                String content = new Gson().toJson(object);
+
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setDoOutput(true);
+                con.setRequestMethod("POST");
+                con.setRequestProperty("Content-Type", "application/json");
+                con.setRequestProperty("Content-Length", String.valueOf(content.length()));
+
+                logger.info(String.valueOf(lat));
+                OutputStream stream = con.getOutputStream();
+                stream.write(content.getBytes());
+                stream.flush();
+
+                String allLines = "";
+                String line;
+                InputStream response = con.getInputStream();
+
+                BufferedReader reader = new BufferedReader(new
+                        InputStreamReader(con.getInputStream()));
+                while ((line = reader.readLine()) != null) {
+                    allLines += line+"/n";
+                }
+                stream.close();
+                reader.close();
+
+
+
+
+
 
         } catch (MalformedURLException e) {
 
@@ -259,6 +279,8 @@ public class UserEndpoint {
         } catch (IOException e) {
 
             logger.severe(e.getMessage()+" "+e.getCause());
+            e.printStackTrace();
+        } catch (NotFoundException e) {
             e.printStackTrace();
         }
 
@@ -333,10 +355,59 @@ public class UserEndpoint {
 
             //Check if user is registered in system AND needy
             if(targetUser != null && targetUser.isNeedy()) {
+
+                URL url = null;
+                try {
+                    url = new URL("https://pushy.me/push?api_key=677903558b207ae13205462e1c7b20609bb6f87e6c5869f38945e6ac6ed8566b");
+                    JsonObject object = new JsonObject();
+                    JsonArray array = new JsonArray();
+                    array.add(new JsonPrimitive(user.getRegID()));
+
+                    JsonObject dataObject = new JsonObject();
+
+                    //Need to send information about user here?
+                    dataObject.addProperty("TYPE" , "HELPED");
+                    dataObject.addProperty("MESSAGE","You helped somebody!Good job! ");
+                    dataObject.addProperty("TITLE","Help Request");
+
+                    object.add("registration_ids", array);
+                    object.add("data", dataObject);
+                    String content = new Gson().toJson(object);
+
+                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                    con.setDoOutput(true);
+                    con.setRequestMethod("POST");
+                    con.setRequestProperty("Content-Type", "application/json");
+                    con.setRequestProperty("Content-Length", String.valueOf(content.length()));
+
+                    OutputStream stream = con.getOutputStream();
+                    stream.write(content.getBytes());
+                    stream.flush();
+
+                    String allLines = "";
+                    String line;
+                    InputStream response = con.getInputStream();
+
+                    BufferedReader reader = new BufferedReader(new
+                            InputStreamReader(con.getInputStream()));
+                    while ((line = reader.readLine()) != null) {
+                        allLines += line+"/n";
+                    }
+                    stream.close();
+                    reader.close();
+
+                } catch (MalformedURLException e) {
+
+                    logger.severe(e.getMessage());
+                } catch (IOException e) {
+
+                    logger.severe(e.getMessage()+" "+e.getCause());
+                    e.printStackTrace();
+                }
+
                 helped.add(Ref.create(targetUser));
                 user.setHelpedRef(helped);
 
-                giveReward(user, razerID);
                 int addPoints = 0;
                 //Add achievement
                 Achievements newAchievement = null;
@@ -355,6 +426,9 @@ public class UserEndpoint {
                 }
                 if (gotAchievements(newAchievement, user)) {
                     newAchievement = null;
+
+                }else{
+                    logger.info("GOt no achievement!");
                 }
                 if (newAchievement != null) {
                     UserAchievement userach = new UserAchievement();
@@ -378,7 +452,7 @@ public class UserEndpoint {
                 }
                 ofy().save().entity(user).now();
             }else{
-                //logger.severe("Handshake with both non needy");
+                logger.severe("Handshake with both non needy"+otherUserID+" id is for target user");
             }
             return ofy().load().entity(user).now();
 
@@ -387,6 +461,7 @@ public class UserEndpoint {
         }
         return null;
     }
+    /*
     private User giveReward(User user, String razerID){
         //Create UserReward
         UserReward userReward = new UserReward();
@@ -408,29 +483,31 @@ public class UserEndpoint {
             }
             //Can put all reward logic here
             userReward.setUserRef(Ref.create(this.get(razerID)));
-            Reward rewardEntity = new Reward();
-            rewardEntity.setId(rewardID);
-            rewardEntity.setPointsRequired(pointsRequired);
-            ofy().save().entity(rewardEntity).now();
-            rewardEntity = ofy().load().entity(rewardEntity).now();
-            userReward.setRewardRef(Ref.create(rewardEntity));
+            if(rewardID != 0) {
+                Reward rewardEntity = new Reward();
+                rewardEntity.setId(rewardID);
+                rewardEntity.setPointsRequired(pointsRequired);
+                ofy().save().entity(rewardEntity).now();
+                rewardEntity = ofy().load().entity(rewardEntity).now();
+                userReward.setRewardRef(Ref.create(rewardEntity));
 
-            //Create user reward and save in db
-            Key<UserReward> key = ofy().save().entity(userReward).now();
 
-            //Append to userreward
-            List<Ref<UserReward>> rewards = user.getRewardsRef();
-            if(rewards == null)
-                rewards = new ArrayList<Ref<UserReward>>();
-            rewards.add(Ref.create(key));
-            user.setRewardsRef(rewards);
+                //Create user reward and save in db
+                Key<UserReward> key = ofy().save().entity(userReward).now();
 
+                //Append to userreward
+                List<Ref<UserReward>> rewards = user.getRewardsRef();
+                if (rewards == null)
+                    rewards = new ArrayList<Ref<UserReward>>();
+                rewards.add(Ref.create(key));
+                user.setRewardsRef(rewards);
+            }
             return user;
         } catch (NotFoundException e) {
             e.printStackTrace();
         }
         return null;
-    }
+    }*/
     private boolean gotAchievements(Achievements ach, User user){
         boolean found = false;
         ArrayList<Achievements> list = new ArrayList<Achievements>();
@@ -441,8 +518,14 @@ public class UserEndpoint {
                 list.add(achievements);
             }
             for(Achievements achievements : list){
-                if(achievements.getAchievementID() == ach.getAchievementID()){
-                    found = true;
+                if(achievements != null && ach != null){
+                    if(achievements.getAchievementID().equals(ach.getAchievementID())){
+                        found = true;
+                    }else{
+                        logger.info("Not equals");
+                    }
+                }else{
+                    logger.info("Compare with either one null");
                 }
             }
         return found;

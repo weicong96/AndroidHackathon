@@ -62,9 +62,7 @@ public class PollingService extends IntentService {
     public void onHandleIntent(Intent intent) {
         setupAPIs();
 
-        Toast.makeText(getApplicationContext(),"Service running", Toast.LENGTH_SHORT).show();
         LoginUtils.getInstance(getApplicationContext()).loginFromDevice();
-
         if(LoginUtils.getInstance(getApplicationContext()).isLoggedIn()){
             //If not logged, setup something here?
 
@@ -80,13 +78,18 @@ public class PollingService extends IntentService {
         LocationManager mLocationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 
         Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
-        criteria.setAltitudeRequired(false);
-        criteria.setBearingRequired(false);
-        criteria.setCostAllowed(true);
-
         String provider = mLocationManager.getBestProvider(criteria, true);
-        mLocationManager.requestLocationUpdates(provider, 30 * 1000, 100, new LocationListener() {
+        Location location = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+        try {
+            new UpdateLocation(location.getLatitude(), location.getLongitude()).execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        mLocationManager.requestLocationUpdates(provider, 5 * 60 * 1000, 100, new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
                 try {
@@ -124,10 +127,10 @@ public class PollingService extends IntentService {
                     for (Hi5Data hi5 : hi5Datas) {
                         //Cannot handshake twice in a minute
                         //TODO : remove when in demo!!!!!
-                        if(Math.abs(time - System.currentTimeMillis()) > (60 * 1000)){
-
+                       if(Math.abs(time - System.currentTimeMillis()) > (60 * 1000)){
+                        LoginUtils.getInstance(getBaseContext()).loginFromDevice();
                         try {
-                            new GivePoints().execute(userID, hi5.userID).get();
+                            new GivePoints().execute(LoginUtils.getInstance(getApplicationContext()).getUser().getRazerID(), hi5.userID).get();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         } catch (ExecutionException e) {
@@ -172,7 +175,8 @@ public class PollingService extends IntentService {
         @Override
         protected Void doInBackground(String... razerIDs) {
             try {
-                api.updateLocation(razerIDs[0], lat, lng).execute();
+                api.updateLocation(LoginUtils.getInstance(getBaseContext()).getUser().getRazerID(), lat, lng).execute();
+                System.out.println("UPDATE LOCATION!");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -183,7 +187,7 @@ public class PollingService extends IntentService {
         @Override
         protected User doInBackground(String... user) {
             try {
-                User newUser = api.addPoint(user[0], user[1]).execute();
+                User newUser = api.addPoint(LoginUtils.getInstance(PollingService.this.getBaseContext()).getUser().getRazerID(), user[1]).execute();
                 System.out.println("Insert data nw");
                 return newUser;
             } catch (IOException e) {

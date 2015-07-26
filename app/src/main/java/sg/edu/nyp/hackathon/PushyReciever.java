@@ -11,14 +11,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
-import sg.edu.nyp.hackathon.activity.HelperNeedyViewActivity;
-
 public class PushyReciever extends BroadcastReceiver
 {
     @Override
     public void onReceive(Context context, Intent intent)
     {
-        if(intent.getStringExtra("TYPE").equals("NEARBY")){
+//       if(intent.getStringExtra("TYPE").equals("NEARBY")){
 
 
         String notificationTitle = intent.getStringExtra("TITLE");
@@ -40,7 +38,7 @@ public class PushyReciever extends BroadcastReceiver
         }
 
             notifyUser(context, notificationTitle,notificationDesc,intent);
-        }
+//        }
 
     }
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -49,12 +47,12 @@ public class PushyReciever extends BroadcastReceiver
         NotificationManager notificationManager = (NotificationManager) activity
                 .getSystemService(Activity.NOTIFICATION_SERVICE);
         Intent notificationIntent = new Intent(
-                activity.getApplicationContext(), HelperNeedyViewActivity.class);
+                activity.getApplicationContext(), MainDrawerActivity.class);
         notificationIntent.putExtra("LAT",intent.getStringExtra("LAT"));
         notificationIntent.putExtra("LNG",intent.getStringExtra("LNG"));
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(activity);
-        stackBuilder.addParentStack(HelperNeedyViewActivity.class);
+        stackBuilder.addParentStack(MainDrawerActivity.class);
         stackBuilder.addNextIntent(notificationIntent);
         PendingIntent pIntent = stackBuilder.getPendingIntent(0,
                 PendingIntent.FLAG_UPDATE_CURRENT);
@@ -67,6 +65,6 @@ public class PushyReciever extends BroadcastReceiver
                                 | Notification.DEFAULT_VIBRATE)
                 .setContentIntent(pIntent).setAutoCancel(true)
                 .setSmallIcon(android.R.drawable.ic_dialog_info).build();
-        notificationManager.notify(2, notification);
+        notificationManager.notify(0, notification);
     }
 }

@@ -13,4 +13,14 @@
     <string name="title_activity_events_upcoming">EventsUpcomingActivity</string>
     <string name="title_activity_rewards_list">RewardsListActivity</string>
     <string name="title_activity_helper_needy_view">Map</string>
+    <string name="title_activity_main_drawer">MainDrawerActivity</string>
+
+    <string name="drawer_open">Helper App</string>
+    <string name="drawer_close">Helper App</string>
+    <string-array name="nav_drawer_items">
+        <item>Your Achievements</item>
+        <item>What\'s Happening</item>
+        <item>Your rewards</item>
+        <item>Events</item>
+    </string-array>
 </resources>
